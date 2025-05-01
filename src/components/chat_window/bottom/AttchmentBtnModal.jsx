@@ -5,8 +5,8 @@ import { useModalState } from "../../../misc/custom-hooks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 
-// Reduced file size for base64 storage in database
-const MAX_FILE_SIZE = 1000 * 1024 * 1; // 1MB max
+// Increased file size limit for base64 storage in database
+const MAX_FILE_SIZE = 1000 * 1024 * 5; // 5MB max
 
 const AttchmentBtnModal = ({ afterUpload }) => {
   const { chatId } = useParams();
@@ -100,7 +100,10 @@ const AttchmentBtnModal = ({ afterUpload }) => {
 
       <Modal open={isOpen} onClose={close}>
         <Modal.Header>
-          <Modal.Title>Upload Files</Modal.Title>
+          <Modal.Title>
+            <FontAwesomeIcon icon={faPaperclip} style={{ marginRight: '8px', color: '#7c3aed' }} />
+            Share Files
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Uploader
@@ -132,9 +135,9 @@ const AttchmentBtnModal = ({ afterUpload }) => {
             Send to Chat
           </Button>
           <div className="text-right mt-2">
-            <small>* only images less than 1 mb are allowed</small>
+            <small>* Files up to 5MB are supported</small>
             <br/>
-            <small>* larger files require Firebase Storage with billing plan</small>
+            <small>* Supported file types: images, documents, PDFs, videos, audio, etc.</small>
           </div>
         </Modal.Footer>
       </Modal>

@@ -1,0 +1,125 @@
+.file-attachment {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #e2e8f0;
+  max-width: 100%;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.file-attachment:hover {
+  background-color: #edf2f7;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.file-icon {
+  font-size: 24px;
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.file-attachment:hover .file-icon {
+  transform: scale(1.05);
+}
+
+.file-info {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.file-name {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #2d3748;
+}
+
+.file-details {
+  font-size: 0.8rem;
+  color: #718096;
+  display: flex;
+  align-items: center;
+}
+
+.file-type {
+  margin-right: 8px;
+  background-color: #e2e8f0;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.file-size {
+  font-size: 0.75rem;
+}
+
+.download-btn {
+  padding: 5px;
+  color: #4a5568;
+  transition: color 0.2s ease;
+}
+
+.download-btn:hover {
+  color: #7c3aed;
+}
+
+/* File preview styles */
+.file-preview {
+  width: 100%;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.text-preview {
+  max-height: 500px;
+  overflow: auto;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  white-space: pre-wrap;
+}
+
+.no-preview {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.no-preview p {
+  margin: 5px 0;
+  color: #718096;
+}
+
+/* Audio message styles */
+.audio-message {
+  margin: 5px 0;
+  width: 100%;
+  max-width: 300px;
+}
+
+.audio-message audio {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.audio-timestamp {
+  font-size: 0.7rem;
+  text-align: right;
+  margin-top: 2px;
+  color: #718096;
+}

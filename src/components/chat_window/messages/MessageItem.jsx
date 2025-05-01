@@ -9,18 +9,10 @@ import ProfileAvatar from "../../ProfileAvatar";
 import IconBtnControl from "./IconBtnControl";
 import ImgBtnModal from "./ImgBtnModal";
 import ProfileInfoBtnModal from "./ProfileInfoBtnModal";
+import FileAttachment from "./FileAttachment";
 
 const renderFileMessage = (file) => {
-  // Handle base64 encoded images (stored in database)
-  if (file.contentType.includes("image") && file.isBase64) {
-    return (
-      <div className="height-220">
-        <ImgBtnModal src={file.url} fileName={file.name} />
-      </div>
-    );
-  }
-
-  // Handle regular images (if Firebase Storage is set up)
+  // Handle images (both base64 and regular)
   if (file.contentType.includes("image")) {
     return (
       <div className="height-220">
@@ -29,13 +21,13 @@ const renderFileMessage = (file) => {
     );
   }
 
+  // Handle audio files with custom player
   if (file.contentType.includes("audio")) {
-    console.log("Rendering audio message:", file);
     return (
       <div className="audio-message">
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <audio controls>
-          <source src={file.url} type="audio/mp3" />
+          <source src={file.url} type={file.contentType} />
           Your browser does not support the audio element.
         </audio>
         <div className="audio-timestamp" style={{ fontSize: '0.7rem', textAlign: 'right', marginTop: '2px' }}>
@@ -45,12 +37,8 @@ const renderFileMessage = (file) => {
     );
   }
 
-  // For base64 files that aren't images, show a message
-  if (file.isBase64) {
-    return <span>File encoded in base64: {file.name}</span>;
-  }
-
-  return <a href={file.url}>Download {file.name}</a>;
+  // For all other file types, use the FileAttachment component
+  return <FileAttachment file={file} />;
 };
 
 const MessageItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
