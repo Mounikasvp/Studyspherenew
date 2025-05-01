@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from "react";
-import { Input, InputGroup, Message, toaster } from "rsuite";
+import { Input, InputGroup } from "rsuite";
 import EditIcon from "@rsuite/icons/Edit";
 import CloseIcon from "@rsuite/icons/Close";
 import CheckIcon from "@rsuite/icons/Check";
+import { showInfoAlert } from "../misc/sweet-alert";
 
 const EditableInput = ({
   initialValue,
@@ -30,11 +31,7 @@ const EditableInput = ({
     const trimmed = input.trim();
 
     if (trimmed === "") {
-      toaster.push(
-        <Message type="info" closable duration={4000}>
-          Empty Message
-        </Message>
-      );
+      showInfoAlert('Empty Input', 'Please enter a value');
     }
 
     if (trimmed !== initialValue) {

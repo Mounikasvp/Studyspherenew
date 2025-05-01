@@ -10,6 +10,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 function assembleMessage(profile, chatId) {
+  // Ensure chatId is a string and not undefined
+  if (!chatId) {
+    console.error('Missing chatId in assembleMessage');
+    throw new Error('Missing chatId in assembleMessage');
+  }
+
+  console.log(`Assembling message for room: ${chatId}`);
+
   return {
     roomId: chatId,
     author: {
@@ -75,31 +83,69 @@ const ChatBottom = () => {
   };
 
   const afterUpload = useCallback(
-    async (files) => {
+    async (files, explicitChatId = null) => {
+      // Use the explicitly provided chatId if available, otherwise use the one from URL params
+      const targetChatId = explicitChatId || chatId;
+
+      // Validate that we have a valid chatId
+      if (!targetChatId) {
+        console.error('Missing chatId in afterUpload');
+        toaster.push(
+          <Message type="error" closable duration={4000}>
+            Error: Could not determine which chat to send to
+          </Message>
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      console.log(`ChatBottom: Processing upload for chat ID ${targetChatId} (URL param chatId: ${chatId})`);
+
       setIsLoading(true);
 
-      const updates = {};
-
-      files.forEach((file) => {
-        const msgData = assembleMessage(profile, chatId);
-        msgData.file = file;
-
-        const messageId = push(ref(database, "messages")).key;
-
-        updates[`/messages/${messageId}`] = msgData;
-      });
-
-      const lastMsgId = Object.keys(updates).pop();
-
-      updates[`/rooms/${chatId}/lastMessage`] = {
-        ...updates[lastMsgId],
-        msgId: lastMsgId,
-      };
-
       try {
-        await update(ref(database), updates);
+        // Create a separate updates object for each target chat
+        // This ensures messages go to the correct rooms
+        const updates = {};
+
+        files.forEach((file) => {
+          try {
+            // Create message data with the target chatId
+            const msgData = assembleMessage(profile, targetChatId);
+
+            // Remove any roomId from the file object to avoid conflicts
+            const { roomId: fileRoomId, ...fileWithoutRoomId } = file;
+
+            // Set the file data
+            msgData.file = fileWithoutRoomId;
+
+            // Log for debugging
+            console.log(`Preparing message for room: ${targetChatId}`, msgData);
+
+            const messageId = push(ref(database, "messages")).key;
+            updates[`/messages/${messageId}`] = msgData;
+
+            // Set last message for this room
+            updates[`/rooms/${targetChatId}/lastMessage`] = {
+              ...msgData,
+              msgId: messageId,
+            };
+          } catch (fileError) {
+            console.error(`Error processing file for room ${targetChatId}:`, fileError);
+          }
+        });
+
+        // Only proceed if we have updates to make
+        if (Object.keys(updates).length > 0) {
+          await update(ref(database), updates);
+          console.log(`Successfully saved message(s) to room: ${targetChatId}`);
+        } else {
+          console.error('No valid updates to send to Firebase');
+        }
+
         setIsLoading(false);
       } catch (err) {
+        console.error(`Error saving message to room ${targetChatId}:`, err);
         setIsLoading(false);
         toaster.push(
           <Message type="error" closable duration={4000}>

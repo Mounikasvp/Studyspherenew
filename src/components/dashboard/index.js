@@ -1,6 +1,6 @@
 import { ref, update } from "firebase/database";
 import React from "react";
-import { Button, Divider, Drawer, Message, toaster, Nav } from "rsuite";
+import { Button, Divider, Drawer, Nav } from "rsuite";
 import { useProfile } from "../../context/profile.context";
 import { database } from "../../misc/firebase.config";
 import { getUserUpdates } from "../../misc/helpers";
@@ -9,6 +9,7 @@ import AvatarUploadBtn from "./AvatarUploadBtn";
 import InvitationsList from "./InvitationsList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { showSuccessAlert, showErrorAlert } from "../../misc/sweet-alert";
 
 const Dashboard = ({ onSignOut }) => {
   const { profile } = useProfile();
@@ -24,16 +25,16 @@ const Dashboard = ({ onSignOut }) => {
 
       await update(ref(database), updates);
 
-      toaster.push(
-        <Message type="success" closable duration={4000}>
-          Nickname has been updated
-        </Message>
+      // Use SweetAlert2 success alert
+      showSuccessAlert(
+        'Profile Updated',
+        'Your nickname has been updated successfully'
       );
     } catch (error) {
-      toaster.push(
-        <Message type="error" closable duration={4000}>
-          {error.message}
-        </Message>
+      // Use SweetAlert2 error alert
+      showErrorAlert(
+        'Update Error',
+        error.message
       );
     }
   };

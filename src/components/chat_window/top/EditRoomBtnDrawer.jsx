@@ -1,11 +1,12 @@
 import { ref, set } from "firebase/database";
 import React, { memo } from "react";
 import { useParams } from "react-router";
-import { Button, Drawer, Message, toaster } from "rsuite";
+import { Button, Drawer } from "rsuite";
 import { useCurrentRoom } from "../../../context/current-room.context";
 import { useMediaQuery, useModalState } from "../../../misc/custom-hooks";
 import { database } from "../../../misc/firebase.config";
 import EditableInput from "../../EditableInput";
+import { showSuccessAlert, showErrorAlert } from "../../../misc/sweet-alert";
 
 const EditRoomBtnDrawer = () => {
   const { chatId } = useParams();
@@ -18,17 +19,17 @@ const EditRoomBtnDrawer = () => {
   const updateData = (key, value) => {
     set(ref(database, `/rooms/${chatId}/${key}`), value)
       .then(() => {
-        toaster.push(
-          <Message type="success" closable duration={4000}>
-            Successfully updated
-          </Message>
+        // Use SweetAlert2 success alert
+        showSuccessAlert(
+          'Updated',
+          `Room ${key} has been successfully updated`
         );
       })
       .catch((err) => {
-        toaster.push(
-          <Message type="error" closable duration={4000}>
-            {err.message}
-          </Message>
+        // Use SweetAlert2 error alert
+        showErrorAlert(
+          'Error',
+          err.message
         );
       });
   };

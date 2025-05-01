@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useParams } from "react-router";
 import { Button, InputGroup, Message, Modal, toaster, Uploader } from "rsuite";
 import { useModalState } from "../../../misc/custom-hooks";
@@ -12,8 +12,18 @@ const AttchmentBtnModal = ({ afterUpload }) => {
   const { chatId } = useParams();
   const { isOpen, open, close } = useModalState();
 
+  // Store the chatId when the modal is opened
+  const modalChatIdRef = useRef(null);
+
   const [fileList, setFileList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Update the stored chatId when opening the modal
+  const handleOpen = () => {
+    modalChatIdRef.current = chatId;
+    console.log(`Attachment modal opened for chat: ${modalChatIdRef.current}`);
+    open();
+  };
 
   const onChange = (fileArr) => {
     const filtered = fileArr
@@ -28,6 +38,20 @@ const AttchmentBtnModal = ({ afterUpload }) => {
       return;
     }
 
+    // Use the stored chatId from when the modal was opened
+    const targetChatId = modalChatIdRef.current;
+
+    if (!targetChatId) {
+      console.error('No target chatId found for file upload');
+      toaster.push(
+        <Message type="error" closable duration={4000}>
+          Error: Could not determine which chat to send files to
+        </Message>
+      );
+      return;
+    }
+
+    console.log(`Uploading files to chat: ${targetChatId}`);
     setIsLoading(true);
 
     try {
@@ -53,7 +77,8 @@ const AttchmentBtnModal = ({ afterUpload }) => {
 
       const files = await Promise.all(filesPromises);
 
-      await afterUpload(files);
+      // Explicitly pass the stored chatId to ensure messages go to the correct room
+      await afterUpload(files, targetChatId);
 
       setIsLoading(false);
       close();
@@ -69,7 +94,7 @@ const AttchmentBtnModal = ({ afterUpload }) => {
 
   return (
     <>
-      <InputGroup.Button onClick={open} className="attachment-btn">
+      <InputGroup.Button onClick={handleOpen} className="attachment-btn">
         <FontAwesomeIcon icon={faPaperclip} />
       </InputGroup.Button>
 

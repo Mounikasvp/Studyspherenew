@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from "react";
-import { Button, Form, Input, Message, Modal, toaster } from "rsuite";
+import { Button, Form, Input, Modal } from "rsuite";
 import { useModalState } from "../misc/custom-hooks";
 import { ref, get, set, serverTimestamp } from "firebase/database";
 import { database, auth } from "../misc/firebase.config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { showSuccessAlert, showErrorAlert, showInfoAlert } from "../misc/sweet-alert";
 
 const JoinRoomModal = () => {
   const { isOpen, open, close } = useModalState();
@@ -17,11 +18,7 @@ const JoinRoomModal = () => {
 
   const onJoinRoom = async () => {
     if (!roomCode.trim()) {
-      toaster.push(
-        <Message type="error" closable duration={4000}>
-          Please enter a room code
-        </Message>
-      );
+      showErrorAlert('Error', 'Please enter a room code');
       return;
     }
 
@@ -31,13 +28,13 @@ const JoinRoomModal = () => {
       // Query for the room with this code
       const roomsRef = ref(database, "rooms");
       const snapshot = await get(roomsRef);
-      
+
       let roomId = null;
       let roomData = null;
-      
+
       if (snapshot.exists()) {
         const rooms = snapshot.val();
-        
+
         // Find the room with matching code
         for (const [id, room] of Object.entries(rooms)) {
           if (room.roomCode && room.roomCode.toUpperCase() === roomCode.toUpperCase()) {
@@ -49,11 +46,7 @@ const JoinRoomModal = () => {
       }
 
       if (!roomId) {
-        toaster.push(
-          <Message type="error" closable duration={4000}>
-            Invalid room code. Please check and try again.
-          </Message>
-        );
+        showErrorAlert('Invalid Code', 'Invalid room code. Please check and try again.');
         setIsLoading(false);
         return;
       }
@@ -62,52 +55,36 @@ const JoinRoomModal = () => {
       if (roomData.isPrivate && (!roomData.members || !roomData.members[auth.currentUser.uid])) {
         // Add user to room members
         await set(ref(database, `rooms/${roomId}/members/${auth.currentUser.uid}`), true);
-        
+
         // Add room to user's joined rooms
         await set(ref(database, `user-rooms/${auth.currentUser.uid}/${roomId}`), {
           joinedAt: serverTimestamp(),
           role: 'member'
         });
 
-        toaster.push(
-          <Message type="success" closable duration={4000}>
-            Successfully joined the room!
-          </Message>
-        );
+        await showSuccessAlert('Success', `Successfully joined ${roomData.name}!`);
       } else if (!roomData.isPrivate) {
         // For public rooms, just add the user as a member if they're not already
         if (!roomData.members || !roomData.members[auth.currentUser.uid]) {
           await set(ref(database, `rooms/${roomId}/members/${auth.currentUser.uid}`), true);
-          
+
           // Add room to user's joined rooms
           await set(ref(database, `user-rooms/${auth.currentUser.uid}/${roomId}`), {
             joinedAt: serverTimestamp(),
             role: 'member'
           });
         }
-        
-        toaster.push(
-          <Message type="success" closable duration={4000}>
-            Successfully joined the room!
-          </Message>
-        );
+
+        await showSuccessAlert('Success', `Successfully joined ${roomData.name}!`);
       } else {
-        toaster.push(
-          <Message type="info" closable duration={4000}>
-            You are already a member of this room.
-          </Message>
-        );
+        showInfoAlert('Already Joined', 'You are already a member of this room.');
       }
 
       setRoomCode("");
       setIsLoading(false);
       close();
     } catch (error) {
-      toaster.push(
-        <Message type="error" closable duration={4000}>
-          {error.message}
-        </Message>
-      );
+      showErrorAlert('Error', error.message);
       setIsLoading(false);
     }
   };

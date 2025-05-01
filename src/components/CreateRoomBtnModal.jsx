@@ -1,11 +1,12 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Button, Form, Input, Message, Modal, Schema, toaster, Radio, RadioGroup, Checkbox } from "rsuite";
+import { Button, Form, Input, Modal, Schema, Radio, RadioGroup } from "rsuite";
 import { useModalState } from "../misc/custom-hooks";
 import { serverTimestamp, ref, push, set } from "firebase/database";
 import { database, auth } from "../misc/firebase.config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { generateUniqueCode } from "../misc/helpers";
+import { showSuccessAlert, showErrorAlert } from "../misc/sweet-alert";
 
 const Textarea = React.forwardRef((props, ref) => (
   <Input {...props} as="textarea" ref={ref} />
@@ -73,10 +74,10 @@ const CreateRoomBtnModal = () => {
         role: 'admin'
       });
 
-      toaster.push(
-        <Message type="info" closable duration={4000}>
-          {`${formValue.name} has been created with code: ${roomCode}`}
-        </Message>
+      // Use SweetAlert2 success alert
+      await showSuccessAlert(
+        'Room Created',
+        `${formValue.name} has been created with code: ${roomCode}`
       );
 
       setIsLoading(false);
@@ -84,11 +85,8 @@ const CreateRoomBtnModal = () => {
       close();
     } catch (error) {
       setIsLoading(false);
-      toaster.push(
-        <Message type="error" closable duration={4000}>
-          {error.message}
-        </Message>
-      );
+      // Use SweetAlert2 error alert
+      showErrorAlert('Error Creating Room', error.message);
     }
   };
 

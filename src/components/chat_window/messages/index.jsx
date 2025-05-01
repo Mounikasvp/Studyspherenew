@@ -16,6 +16,7 @@ import { deleteObject, ref as storageRef } from "firebase/storage";
 import { auth, database, storage } from "../../../misc/firebase.config";
 import { groupBy, transformToArrWithId } from "../../../misc/helpers";
 import MessageItem from "./MessageItem";
+import { showConfirmDialog, showToast } from "../../../misc/sweet-alert";
 
 const PAGE_SIZE = 15;
 const messagesRef = dbRef(database, "/messages");
@@ -42,6 +43,8 @@ const Messages = () => {
 
       off(messagesRef);
 
+      console.log(`Loading messages for room: ${chatId}`);
+
       onValue(
         query(
           messagesRef,
@@ -51,7 +54,28 @@ const Messages = () => {
         ),
         (snap) => {
           const data = transformToArrWithId(snap.val());
-          setMessages(data);
+          console.log(`Received ${data ? data.length : 0} messages for room ${chatId}`);
+
+          // Additional check to ensure messages belong to this room
+          const filteredData = data ? data.filter(msg => {
+            // Strict check to ensure roomId matches exactly
+            const matches = msg.roomId === chatId;
+            if (!matches) {
+              console.warn(`Message ${msg.id} has incorrect roomId: ${msg.roomId}, expected: ${chatId}`);
+
+              // Log message details for debugging
+              if (msg.file && msg.file.contentType && msg.file.contentType.includes('audio')) {
+                console.warn('Audio message with wrong roomId:', msg);
+              }
+            }
+            return matches;
+          }) : [];
+
+          if (data && data.length !== filteredData.length) {
+            console.warn(`Filtered out ${data.length - filteredData.length} messages with incorrect roomId`);
+          }
+
+          setMessages(filteredData);
 
           if (shouldScrollToBottom(node)) {
             node.scrollTop = node.scrollHeight;
@@ -110,11 +134,8 @@ const Messages = () => {
         }
       );
 
-      toaster.push(
-        <Message type="info" closable duration={4000}>
-          {alertMsg}
-        </Message>
-      );
+      // Use SweetAlert2 toast notification
+      showToast(alertMsg, 'info');
     },
     [chatId]
   );
@@ -146,17 +167,22 @@ const Messages = () => {
       return msg;
     });
 
-    toaster.push(
-      <Message type="info" closable duration={4000}>
-        {alertMsg}
-      </Message>
-    );
+    // Use SweetAlert2 toast notification
+    showToast(alertMsg, 'info');
   }, []);
 
   const handleDelete = useCallback(
     async (msgId, file) => {
-      // eslint-disable-next-line no-alert
-      if (!window.confirm("Delete this message?")) {
+      // Use SweetAlert2 for confirmation
+      const result = await showConfirmDialog(
+        'Delete Message',
+        'Are you sure you want to delete this message?',
+        'Yes, delete it',
+        'Cancel'
+      );
+
+      // If user cancels, return early
+      if (!result.isConfirmed) {
         return;
       }
 
@@ -180,17 +206,11 @@ const Messages = () => {
       try {
         await update(dbRef(database), updates);
 
-        toaster.push(
-          <Message type="info" closable duration={4000}>
-            Message has been deleted
-          </Message>
-        );
+        // Use SweetAlert2 toast notification
+        showToast('Message has been deleted', 'success');
       } catch (err) {
-        return toaster.push(
-          <Message type="error" closable duration={4000}>
-            {err.message}
-          </Message>
-        );
+        showToast(err.message, 'error');
+        return;
       }
 
       // If file exists and is not a base64 file (meaning it's stored in Firebase Storage)
@@ -199,11 +219,7 @@ const Messages = () => {
           const fileRef = storageRef(storage, file.url);
           await deleteObject(fileRef);
         } catch (err) {
-          toaster.push(
-            <Message type="error" closable duration={4000}>
-              {err.message}
-            </Message>
-          );
+          showToast(err.message, 'error');
         }
       }
       // Base64 files are deleted automatically when the message is deleted from the database

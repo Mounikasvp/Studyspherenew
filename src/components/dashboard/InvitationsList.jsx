@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { List, Button, Loader, Message, toaster, Panel, Badge, Placeholder } from 'rsuite';
+import { List, Button, Loader, Panel, Badge, Placeholder } from 'rsuite';
 import { getReceivedInvitations, acceptInvitation, declineInvitation } from '../../misc/invitation-service';
 import { database } from '../../misc/firebase.config';
 import { ref, onValue, off } from 'firebase/database';
@@ -7,6 +7,7 @@ import { useProfile } from '../../context/profile.context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes, faEnvelope, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { showSuccessAlert, showErrorAlert, showInfoAlert } from '../../misc/sweet-alert';
 
 const InvitationsList = () => {
   const { profile } = useProfile();
@@ -20,12 +21,12 @@ const InvitationsList = () => {
     if (!profile) return;
 
     const invitationsRef = ref(database, 'invitations');
-    
+
     onValue(invitationsRef, snapshot => {
       if (snapshot.exists()) {
         const invitationsData = snapshot.val();
         const receivedInvitations = [];
-        
+
         // Filter invitations for current user
         Object.keys(invitationsData).forEach(key => {
           const invitation = invitationsData[key];
@@ -36,20 +37,20 @@ const InvitationsList = () => {
             });
           }
         });
-        
+
         // Sort by timestamp (newest first)
         receivedInvitations.sort((a, b) => {
           return (b.timestamp || 0) - (a.timestamp || 0);
         });
-        
+
         setInvitations(receivedInvitations);
       } else {
         setInvitations([]);
       }
-      
+
       setIsLoading(false);
     });
-    
+
     return () => {
       off(invitationsRef);
     };
@@ -58,14 +59,14 @@ const InvitationsList = () => {
   // Fetch sender names
   useEffect(() => {
     const senderIds = [...new Set(invitations.map(inv => inv.senderId))];
-    
+
     if (senderIds.length === 0) return;
-    
+
     const names = {};
-    
+
     senderIds.forEach(senderId => {
       const userRef = ref(database, `users/${senderId}`);
-      
+
       onValue(userRef, snapshot => {
         if (snapshot.exists()) {
           const userData = snapshot.val();
@@ -74,7 +75,7 @@ const InvitationsList = () => {
         }
       });
     });
-    
+
     return () => {
       senderIds.forEach(senderId => {
         off(ref(database, `users/${senderId}`));
@@ -87,27 +88,27 @@ const InvitationsList = () => {
       ...prev,
       [invitationId]: 'accepting'
     }));
-    
+
     try {
       await acceptInvitation(invitationId, invitation);
-      
-      toaster.push(
-        <Message type="success" closable duration={4000}>
-          You have joined the group: {invitation.groupName}
-        </Message>
+
+      // Use SweetAlert2 success alert
+      showSuccessAlert(
+        'Invitation Accepted',
+        `You have joined the group: ${invitation.groupName}`
       );
-      
+
       setProcessingInvitations(prev => ({
         ...prev,
         [invitationId]: null
       }));
     } catch (error) {
-      toaster.push(
-        <Message type="error" closable duration={4000}>
-          Error accepting invitation: {error.message}
-        </Message>
+      // Use SweetAlert2 error alert
+      showErrorAlert(
+        'Error Accepting Invitation',
+        error.message
       );
-      
+
       setProcessingInvitations(prev => ({
         ...prev,
         [invitationId]: null
@@ -120,27 +121,27 @@ const InvitationsList = () => {
       ...prev,
       [invitationId]: 'declining'
     }));
-    
+
     try {
       await declineInvitation(invitationId);
-      
-      toaster.push(
-        <Message type="info" closable duration={4000}>
-          Invitation declined
-        </Message>
+
+      // Use SweetAlert2 info alert
+      showInfoAlert(
+        'Invitation Declined',
+        'The invitation has been declined'
       );
-      
+
       setProcessingInvitations(prev => ({
         ...prev,
         [invitationId]: null
       }));
     } catch (error) {
-      toaster.push(
-        <Message type="error" closable duration={4000}>
-          Error declining invitation: {error.message}
-        </Message>
+      // Use SweetAlert2 error alert
+      showErrorAlert(
+        'Error Declining Invitation',
+        error.message
       );
-      
+
       setProcessingInvitations(prev => ({
         ...prev,
         [invitationId]: null
@@ -157,7 +158,7 @@ const InvitationsList = () => {
   }
 
   return (
-    <Panel 
+    <Panel
       header={
         <div className="d-flex align-items-center">
           <FontAwesomeIcon icon={faEnvelope} className="mr-2" style={{ color: '#4f46e5' }} />
@@ -166,7 +167,7 @@ const InvitationsList = () => {
             <Badge content={invitations.length} style={{ marginLeft: '10px' }} />
           )}
         </div>
-      } 
+      }
       bordered
     >
       {invitations.length === 0 ? (
