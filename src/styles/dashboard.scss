@@ -1,0 +1,161 @@
+// Dashboard Styles
+@import './variables.scss';
+
+// Color Variables - Using the same palette as landing page and chat page
+$primary-color: #4f46e5; // Indigo
+$secondary-color: #0ea5e9; // Sky blue
+$dark-color: #1e293b; // Slate dark
+$light-color: #f8fafc; // Slate lightest
+$accent-color: #8b5cf6; // Violet
+$text-color: #334155; // Slate
+$light-text: #fff;
+$card-bg: #fff;
+$gradient-start: #4f46e5;
+$gradient-end: #7c3aed;
+$border-color: #e2e8f0;
+
+// Modern variables
+$gradient-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+$gradient-secondary: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+$glass-bg: rgba(255, 255, 255, 0.15);
+$glass-border: 1px solid rgba(255, 255, 255, 0.2);
+$glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
+
+// Dashboard Styles
+.dashboard-container {
+  font-family: 'Poppins', sans-serif;
+
+  .rs-drawer-header {
+    background-color: $light-color;
+    border-bottom: 1px solid $border-color;
+
+    .rs-drawer-title {
+      color: $dark-color;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+  }
+
+  .rs-drawer-body {
+    background-color: $light-color;
+    padding: 1.5rem;
+
+    .rs-nav-tabs {
+      border-bottom-color: $border-color;
+
+      .rs-nav-item {
+        margin-right: 1rem;
+
+        .rs-nav-item-content {
+          color: $text-color;
+          font-weight: 600;
+          padding: 0.75rem 1rem;
+
+          &:hover {
+            color: $primary-color;
+          }
+        }
+
+        &.rs-nav-item-active .rs-nav-item-content {
+          color: $primary-color;
+          border-bottom-color: $primary-color;
+        }
+      }
+    }
+
+    .profile-section {
+      padding: 1.5rem 0;
+
+      h3 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: $dark-color;
+        margin-bottom: 1.5rem;
+      }
+
+      .rs-divider {
+        margin: 1.5rem 0;
+        border-top-color: $border-color;
+      }
+
+      .nickname-section {
+        margin-bottom: 2rem;
+
+        h6 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: $text-color;
+          margin-bottom: 0.5rem;
+        }
+
+        .rs-input {
+          border-radius: 8px;
+          border-color: $border-color;
+          padding: 0.75rem 1rem;
+          font-size: 0.95rem;
+
+          &:focus {
+            border-color: $primary-color;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+          }
+        }
+
+        .rs-btn {
+          border-radius: 8px;
+          padding: 0.5rem 1rem;
+          font-weight: 600;
+
+          &.rs-btn-primary {
+            background: $gradient-primary;
+            border: none;
+          }
+        }
+      }
+
+      .avatar-section {
+        text-align: center;
+        margin-top: 2rem;
+
+        .avatar-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .rs-avatar {
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 3px solid $light-color;
+          }
+        }
+      }
+    }
+
+    .invitations-section {
+      padding: 1.5rem 0;
+    }
+
+    .rs-drawer-actions {
+      margin-top: 2rem;
+
+      .rs-btn {
+        border-radius: 12px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        &.rs-btn-red {
+          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+          border: none;
+        }
+      }
+    }
+  }
+}

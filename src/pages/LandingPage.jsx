@@ -60,6 +60,7 @@ const LandingPage = () => {
           <div className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></div>
         </div>
         <nav className={`landing-nav ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+          <button className="close-menu" onClick={() => setMobileMenuOpen(false)}>×</button>
           <ul>
             <li><a href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a></li>
             <li><a href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How It Works</a></li>
@@ -71,6 +72,7 @@ const LandingPage = () => {
             </li>
           </ul>
         </nav>
+        {mobileMenuOpen && <div className="menu-backdrop" onClick={() => setMobileMenuOpen(false)}></div>}
       </header>
 
       {/* Hero Section */}

@@ -1,16 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Divider, ButtonGroup, Button, Toggle } from "rsuite";
+import { Divider, ButtonGroup, Button, Toggle, InputGroup, Input } from "rsuite";
 import CreateRoomBtnModal from "./CreateRoomBtnModal";
 import JoinRoomModal from "./JoinRoomModal";
 import DashboardToggle from "./dashboard/DashboardToggle";
 import ChatRoomList from "./rooms/ChatRoomList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers, faGlobe } from "@fortawesome/free-solid-svg-icons";
+import { faUsers, faGlobe, faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = () => {
   const topSidebarRef = useRef();
   const [height, setHeight] = useState(0);
   const [showOnlyJoined, setShowOnlyJoined] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (value) => {
+    setSearchQuery(value);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+  };
 
   useEffect(() => {
     const updateHeight = () => {
@@ -33,7 +42,7 @@ const Sidebar = () => {
       clearTimeout(timer);
       window.removeEventListener('resize', updateHeight);
     };
-  }, [topSidebarRef, showOnlyJoined]);
+  }, [topSidebarRef, showOnlyJoined, searchQuery]);
 
   return (
     <div className="h-100 d-flex flex-column">
@@ -55,10 +64,33 @@ const Sidebar = () => {
               'Showing all available groups'}
           </small>
         </div>
+
+        <div className="search-container">
+          <InputGroup inside className="search-input">
+            <InputGroup.Addon>
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroup.Addon>
+            <Input
+              placeholder="Search groups..."
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+            {searchQuery && (
+              <InputGroup.Button onClick={clearSearch} className="clear-search-btn">
+                <FontAwesomeIcon icon={faTimes} />
+              </InputGroup.Button>
+            )}
+          </InputGroup>
+        </div>
+
         <Divider className="divider">Study Groups</Divider>
       </div>
       <div className="room-list-container">
-        <ChatRoomList aboveElHeight={height} showOnlyJoined={showOnlyJoined} />
+        <ChatRoomList
+          aboveElHeight={height}
+          showOnlyJoined={showOnlyJoined}
+          searchQuery={searchQuery}
+        />
       </div>
     </div>
   );

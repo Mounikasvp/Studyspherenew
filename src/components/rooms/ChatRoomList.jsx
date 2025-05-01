@@ -9,7 +9,7 @@ import { ref, onValue, off } from "firebase/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
-const ChatRoomList = ({ aboveElHeight, showOnlyJoined = true }) => {
+const ChatRoomList = ({ aboveElHeight, showOnlyJoined = true, searchQuery = '' }) => {
   const rooms = useRooms();
   const { profile } = useProfile();
   const location = useLocation();
@@ -31,15 +31,29 @@ const ChatRoomList = ({ aboveElHeight, showOnlyJoined = true }) => {
     };
   }, [profile]);
 
-  // Filter rooms based on the toggle setting
+  // Filter rooms based on the toggle setting and search query
   const filteredRooms = rooms ? rooms.filter(room => {
+    // First filter by membership status
+    let shouldInclude = false;
+
     // If showing all rooms, include public rooms and rooms the user is a member of
     if (!showOnlyJoined) {
-      return !room.isPrivate || (room.members && room.members[auth.currentUser.uid]);
+      shouldInclude = !room.isPrivate || (room.members && room.members[auth.currentUser.uid]);
+    } else {
+      // If showing only joined rooms, check if user is a member
+      shouldInclude = userRooms[room.id];
     }
 
-    // If showing only joined rooms, check if user is a member
-    return userRooms[room.id];
+    // Then filter by search query if one exists
+    if (shouldInclude && searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      const roomName = room.name.toLowerCase();
+      const roomDescription = room.description ? room.description.toLowerCase() : '';
+
+      return roomName.includes(query) || roomDescription.includes(query);
+    }
+
+    return shouldInclude;
   }) : [];
 
   return (
@@ -66,9 +80,11 @@ const ChatRoomList = ({ aboveElHeight, showOnlyJoined = true }) => {
       {rooms && filteredRooms.length === 0 && (
         <div className="empty-room-list">
           <Message type="info" header="No study groups found">
-            {showOnlyJoined ?
-              "You haven't joined any study groups yet. Create a new group or join an existing one with a code." :
-              "No public study groups available. Create a new group to get started."}
+            {searchQuery.trim() ?
+              `No groups found matching "${searchQuery}". Try a different search term.` :
+              (showOnlyJoined ?
+                "You haven't joined any study groups yet. Create a new group or join an existing one with a code." :
+                "No public study groups available. Create a new group to get started.")}
           </Message>
         </div>
       )}

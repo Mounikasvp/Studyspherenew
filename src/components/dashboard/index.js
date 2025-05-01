@@ -6,7 +6,6 @@ import { database } from "../../misc/firebase.config";
 import { getUserUpdates } from "../../misc/helpers";
 import EditableInput from "../EditableInput";
 import AvatarUploadBtn from "./AvatarUploadBtn";
-import ProviderBlock from "./ProviderBlock";
 import InvitationsList from "./InvitationsList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
@@ -42,13 +41,13 @@ const Dashboard = ({ onSignOut }) => {
   const [activeTab, setActiveTab] = React.useState('profile');
 
   return (
-    <>
+    <div className="dashboard-container">
       <Drawer.Header>
         <Drawer.Title>Dashboard</Drawer.Title>
       </Drawer.Header>
 
       <Drawer.Body>
-        <Nav appearance="tabs" activeKey={activeTab} onSelect={setActiveTab} style={{ marginBottom: '20px' }}>
+        <Nav appearance="tabs" activeKey={activeTab} onSelect={setActiveTab}>
           <Nav.Item eventKey="profile" icon={<FontAwesomeIcon icon={faUser} />}>
             Profile
           </Nav.Item>
@@ -58,35 +57,36 @@ const Dashboard = ({ onSignOut }) => {
         </Nav>
 
         {activeTab === 'profile' && (
-          <div style={{ height: "calc(100% - 80px)" }}>
+          <div className="profile-section">
             <h3>Hey, {profile.name}</h3>
-            <ProviderBlock />
             <Divider />
-            <EditableInput
-              name="nickname"
-              initialValue={profile.name}
-              onSave={onSave}
-              label={<h6 className="mb-2">Nickname</h6>}
-            />
-            <AvatarUploadBtn />
+            <div className="nickname-section">
+              <EditableInput
+                name="nickname"
+                initialValue={profile.name}
+                onSave={onSave}
+                label={<h6 className="mb-2">Nickname</h6>}
+              />
+            </div>
+            <div className="avatar-section">
+              <AvatarUploadBtn />
+            </div>
           </div>
         )}
 
         {activeTab === 'invitations' && (
-          <div style={{ height: "calc(100% - 80px)" }}>
+          <div className="invitations-section">
             <InvitationsList />
           </div>
         )}
 
-        <div style={{ marginTop: '20px' }}>
-          <Drawer.Actions>
-            <Button block color="red" appearance="primary" onClick={onSignOut}>
-              Sign Out
-            </Button>
-          </Drawer.Actions>
-        </div>
+        <Drawer.Actions>
+          <Button block color="red" appearance="primary" onClick={onSignOut}>
+            Sign Out
+          </Button>
+        </Drawer.Actions>
       </Drawer.Body>
-    </>
+    </div>
   );
 };
 

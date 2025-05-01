@@ -38,18 +38,51 @@ export const ProfileProvider = ({ children }) => {
         userRef = ref(database, `/users/${authObj.uid}`);
 
         onValue(userRef, (snap) => {
-          const { name, createdAt, avatar } = snap.val();
+          try {
+            const userData = snap.val();
 
-          const data = {
-            name,
-            createdAt,
-            avatar,
-            uid: authObj.uid,
-            email: authObj.email,
-          };
+            // Check if userData exists
+            if (userData) {
+              const { name, createdAt, avatar } = userData;
 
-          setProfile(data);
-          setIsLoading(false);
+              const data = {
+                name,
+                createdAt,
+                avatar,
+                uid: authObj.uid,
+                email: authObj.email,
+              };
+
+              setProfile(data);
+            } else {
+              // If user data doesn't exist in the database yet, create a basic profile
+              const newUserData = {
+                name: authObj.email.split('@')[0],
+                createdAt: serverTimestamp(),
+                avatar: null
+              };
+
+              // Set the user data in the database
+              set(userRef, newUserData)
+                .then(() => {
+                  const data = {
+                    ...newUserData,
+                    uid: authObj.uid,
+                    email: authObj.email,
+                  };
+                  setProfile(data);
+                })
+                .catch(error => {
+                  console.error("Error creating user data:", error);
+                  setProfile(null);
+                });
+            }
+          } catch (error) {
+            console.error("Error processing user data:", error);
+            setProfile(null);
+          } finally {
+            setIsLoading(false);
+          }
         });
 
         onValue(ref(database, ".info/connected"), (snapshot) => {

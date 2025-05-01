@@ -6,15 +6,15 @@ import { useProfile } from "../context/profile.context";
 const PublicRoute = ({ children, ...routeProps }) => {
   const { profile, isLoading } = useProfile();
 
-  if (isLoading && !profile) {
+  if (isLoading) {
     return (
       <Container>
-        <Loader center vertical size="md" speed="slow" />
+        <Loader center vertical size="md" content="Loading..." speed="slow" />
       </Container>
     );
   }
 
-  if (profile && !isLoading) {
+  if (profile) {
     return <Redirect to={"/chat"} />;
   }
 

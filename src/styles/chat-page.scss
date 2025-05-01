@@ -118,6 +118,51 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
         }
       }
 
+      .search-container {
+        margin: 1rem 0;
+
+        .search-input {
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          border: 1px solid $border-color;
+          transition: all 0.3s ease;
+
+          &:focus-within {
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+            border-color: rgba(79, 70, 229, 0.3);
+            transform: translateY(-1px);
+          }
+
+          .rs-input {
+            padding: 0.75rem 0.5rem 0.75rem 2.5rem;
+            border: none;
+            background-color: white;
+
+            &:focus {
+              outline: none;
+              box-shadow: none;
+            }
+          }
+
+          .rs-input-group-addon {
+            background-color: transparent;
+            color: #64748b;
+            padding-left: 1rem;
+          }
+
+          .clear-search-btn {
+            background-color: transparent;
+            color: #64748b;
+            transition: all 0.2s ease;
+
+            &:hover {
+              color: $primary-color;
+            }
+          }
+        }
+      }
+
       // Home button removed
     }
 
