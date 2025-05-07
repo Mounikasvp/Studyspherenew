@@ -1,0 +1,115 @@
+/* Custom SweetAlert2 Styles */
+.swal2-popup {
+  font-family: 'Poppins', sans-serif;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.swal2-title {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1.5rem;
+}
+
+.swal2-html-container {
+  color: #64748b;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.swal2-icon {
+  border-width: 3px;
+}
+
+.swal2-icon.swal2-success {
+  border-color: #10b981;
+}
+
+.swal2-icon.swal2-success [class^=swal2-success-line] {
+  background-color: #10b981;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.swal2-icon.swal2-error {
+  border-color: #ef4444;
+}
+
+.swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+  background-color: #ef4444;
+}
+
+.swal2-confirm.swal2-styled {
+  background-color: #4f46e5;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.swal2-confirm.swal2-styled:hover {
+  background-color: #4338ca;
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+}
+
+.swal2-timer-progress-bar {
+  background: rgba(79, 70, 229, 0.5);
+}
+
+/* Enhanced animations */
+@keyframes swal2-show {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes swal2-hide {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* Animation for success alert */
+.swal2-icon.swal2-success.swal2-animate-success-icon .swal2-success-circular-line-right {
+  animation: rotatePlaceholder 4.25s ease-in;
+}
+
+/* Custom animation for error icon */
+.swal2-icon.swal2-error.swal2-animate-error-icon {
+  animation: animateErrorIcon 0.5s;
+}
+
+.swal2-icon.swal2-error.swal2-animate-error-icon .swal2-x-mark {
+  animation: animateXMark 0.5s;
+}
+
+/* Pulse animation for the OK button */
+.swal2-confirm.swal2-styled {
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}

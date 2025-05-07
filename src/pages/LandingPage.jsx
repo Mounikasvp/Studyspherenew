@@ -19,10 +19,12 @@ const LandingPage = () => {
     // Handle navbar scroll behavior
     const handleScroll = () => {
       const header = document.querySelector('.landing-header');
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
+      if (header) {
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
       }
     };
 
@@ -31,18 +33,38 @@ const LandingPage = () => {
       const nav = document.querySelector('.landing-nav');
       const hamburger = document.querySelector('.hamburger-menu');
 
-      if (mobileMenuOpen && nav && !nav.contains(event.target) && !hamburger.contains(event.target)) {
+      if (mobileMenuOpen && nav && !nav.contains(event.target) && hamburger && !hamburger.contains(event.target)) {
         setMobileMenuOpen(false);
       }
     };
 
+    // Close mobile menu when pressing escape key
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    // Prevent body scrolling when mobile menu is open
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
     window.addEventListener('scroll', handleScroll);
     document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscKey);
+
+    // Initial call to set the correct state
+    handleScroll();
 
     // Clean up event listeners
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscKey);
+      document.body.style.overflow = '';
     };
   }, [mobileMenuOpen]);
 
@@ -54,19 +76,48 @@ const LandingPage = () => {
           <div className="logo-icon"></div>
           <h1>StudySphere</h1>
         </div>
-        <div className="hamburger-menu" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+        <button
+          className="hamburger-menu"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-nav"
+        >
           <div className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></div>
           <div className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></div>
           <div className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></div>
-        </div>
-        <nav className={`landing-nav ${mobileMenuOpen ? 'mobile-open' : ''}`}>
-          <button className="close-menu" onClick={() => setMobileMenuOpen(false)}>×</button>
+        </button>
+        <nav id="mobile-nav" className={`landing-nav ${mobileMenuOpen ? 'mobile-open' : ''}`}>
           <ul>
-            <li><a href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a></li>
-            <li><a href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How It Works</a></li>
-            <li><a href="#testimonials" onClick={() => setMobileMenuOpen(false)}>Testimonials</a></li>
             <li>
-              <Link to="/signin" onClick={() => setMobileMenuOpen(false)}>
+              <a
+                href="#features"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Features
+              </a>
+            </li>
+            <li>
+              <a
+                href="#how-it-works"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                How It Works
+              </a>
+            </li>
+            <li>
+              <a
+                href="#testimonials"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Testimonials
+              </a>
+            </li>
+            <li>
+              <Link
+                to="/signin"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 <Button appearance="primary" className="gradient-btn">Sign In</Button>
               </Link>
             </li>
@@ -90,9 +141,6 @@ const LandingPage = () => {
             <Row className="align-items-center">
               <Col xs={24} md={12} data-aos="fade-right">
                 <div className="hero-content">
-                  <div className="badge">
-                    <span>🚀 New Feature</span> Voice Messages Now Available
-                  </div>
                   <h1>
                     Connect, Collaborate,
                     <span className="gradient-text"> and Learn</span> Together
@@ -107,24 +155,6 @@ const LandingPage = () => {
                         Get Started Free
                       </Button>
                     </Link>
-                    <a href="#features" className="demo-btn">
-                      <span className="play-icon">▶</span>
-                      Watch Demo
-                    </a>
-                  </div>
-                  <div className="hero-stats">
-                    <div className="stat-item">
-                      <h4>10K+</h4>
-                      <p>Active Users</p>
-                    </div>
-                    <div className="stat-item">
-                      <h4>500+</h4>
-                      <p>Study Groups</p>
-                    </div>
-                    <div className="stat-item">
-                      <h4>4.9/5</h4>
-                      <p>User Rating</p>
-                    </div>
                   </div>
                 </div>
               </Col>
@@ -136,8 +166,8 @@ const LandingPage = () => {
                       <span>Live Chat</span>
                     </div>
                     <div className="float-card card-2">
-                      <i className="fa-solid fa-video"></i>
-                      <span>Video Calls</span>
+                      <i className="fa-light fa-note"></i>
+                      <span>Sharing Notes</span>
                     </div>
                     <div className="float-card card-3">
                       <i className="fa-solid fa-file-alt"></i>
@@ -171,215 +201,57 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" style={{
-        backgroundColor: 'white',
-        padding: '100px 0',
-        minHeight: '100vh',
-        boxShadow: '0 0 20px rgba(0,0,0,0.1)',
-        marginTop: '-50px',
-        position: 'relative',
-        zIndex: 10
-      }}>
+      <section id="features" className="features-section">
         <Container>
-          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-            <div style={{
-              display: 'inline-block',
-              padding: '8px 16px',
-              backgroundColor: '#e0e7ff',
-              borderRadius: '50px',
-              color: '#4f46e5',
-              fontWeight: 'bold',
-              fontSize: '14px',
-              marginBottom: '16px'
-            }}>
-              FEATURES
-            </div>
-            <h2 style={{
-              fontSize: '36px',
-              fontWeight: 'bold',
-              color: '#1e293b',
-              marginBottom: '16px'
-            }}>
-              Everything you need to succeed
-            </h2>
-            <p style={{
-              fontSize: '18px',
-              color: '#64748b',
-              maxWidth: '700px',
-              margin: '0 auto 40px'
-            }}>
-              Powerful tools designed to enhance your learning experience
-            </p>
+          <div className="section-title">
+            <div className="badge">FEATURES</div>
+            <h2>Everything you need to succeed</h2>
+            <p>Powerful tools designed to enhance your learning experience</p>
           </div>
 
-          <Grid>
-            <Row>
-              <Col xs={24} md={8}>
-                <div style={{
-                  backgroundColor: 'white',
-                  borderRadius: '16px',
-                  padding: '32px',
-                  marginBottom: '32px',
-                  textAlign: 'center',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                  border: '1px solid #e2e8f0',
-                  height: '100%'
-                }}>
-                  <div style={{
-                    width: '70px',
-                    height: '70px',
-                    backgroundColor: '#eef2ff',
-                    borderRadius: '16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 24px',
-                    fontSize: '28px',
-                    color: '#4f46e5'
-                  }}>
-                    <i className="fa-solid fa-comments"></i>
+          <div className="features-grid">
+            <Grid>
+              <Row>
+                <Col xs={24} md={8}>
+                  <div className="feature-card">
+                    <div className="feature-icon">
+                      <i className="fa-solid fa-comments"></i>
+                    </div>
+                    <h3>Real-time Messaging</h3>
+                    <p>
+                      Experience seamless communication with instant messaging.
+                    </p>
                   </div>
-                  <h3 style={{
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    color: '#1e293b',
-                    marginBottom: '16px'
-                  }}>
-                    Real-time Messaging
-                  </h3>
-                  <p style={{
-                    color: '#64748b',
-                    marginBottom: '24px',
-                    lineHeight: '1.6'
-                  }}>
-                    Experience seamless communication with instant messaging and real-time updates.
-                  </p>
-                  <button style={{
-                    color: '#4f46e5',
-                    fontWeight: '600',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    border: 'none',
-                    background: 'none',
-                    cursor: 'pointer'
-                  }}>
-                    Learn more <i className="fas fa-arrow-right"></i>
-                  </button>
-                </div>
-              </Col>
+                </Col>
 
-              <Col xs={24} md={8}>
-                <div style={{
-                  backgroundColor: 'white',
-                  borderRadius: '16px',
-                  padding: '32px',
-                  marginBottom: '32px',
-                  textAlign: 'center',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                  border: '1px solid #e2e8f0',
-                  height: '100%'
-                }}>
-                  <div style={{
-                    width: '70px',
-                    height: '70px',
-                    backgroundColor: '#eef2ff',
-                    borderRadius: '16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 24px',
-                    fontSize: '28px',
-                    color: '#4f46e5'
-                  }}>
-                    <i className="fa-solid fa-users"></i>
-                  </div>
-                  <h3 style={{
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    color: '#1e293b',
-                    marginBottom: '16px'
-                  }}>
-                    Study Groups
-                  </h3>
-                  <p style={{
-                    color: '#64748b',
-                    marginBottom: '24px',
-                    lineHeight: '1.6'
-                  }}>
-                    Create dedicated spaces for different subjects, projects, or study groups.
-                  </p>
-                  <button style={{
-                    color: '#4f46e5',
-                    fontWeight: '600',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    border: 'none',
-                    background: 'none',
-                    cursor: 'pointer'
-                  }}>
-                    Learn more <i className="fas fa-arrow-right"></i>
-                  </button>
-                </div>
-              </Col>
+                <Col xs={24} md={8}>
+                  <div className="feature-card">
+                    <div className="feature-icon">
+                      <i className="fa-solid fa-users"></i>
+                    </div>
+                    <h3>Study Groups</h3>
+                    <p>
+                      Create dedicated spaces for different subjects, projects, or study groups.
+                    </p>
 
-              <Col xs={24} md={8}>
-                <div style={{
-                  backgroundColor: 'white',
-                  borderRadius: '16px',
-                  padding: '32px',
-                  marginBottom: '32px',
-                  textAlign: 'center',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                  border: '1px solid #e2e8f0',
-                  height: '100%'
-                }}>
-                  <div style={{
-                    width: '70px',
-                    height: '70px',
-                    backgroundColor: '#eef2ff',
-                    borderRadius: '16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 24px',
-                    fontSize: '28px',
-                    color: '#4f46e5'
-                  }}>
-                    <i className="fa-solid fa-file-arrow-up"></i>
                   </div>
-                  <h3 style={{
-                    fontSize: '24px',
-                    fontWeight: 'bold',
-                    color: '#1e293b',
-                    marginBottom: '16px'
-                  }}>
-                    File Sharing
-                  </h3>
-                  <p style={{
-                    color: '#64748b',
-                    marginBottom: '24px',
-                    lineHeight: '1.6'
-                  }}>
-                    Share notes, assignments, and study materials directly in your conversations.
-                  </p>
-                  <button style={{
-                    color: '#4f46e5',
-                    fontWeight: '600',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    border: 'none',
-                    background: 'none',
-                    cursor: 'pointer'
-                  }}>
-                    Learn more <i className="fas fa-arrow-right"></i>
-                  </button>
-                </div>
-              </Col>
-            </Row>
-          </Grid>
+                </Col>
+
+                <Col xs={24} md={8}>
+                  <div className="feature-card">
+                    <div className="feature-icon">
+                      <i className="fa-solid fa-file-arrow-up"></i>
+                    </div>
+                    <h3>File Sharing</h3>
+                    <p>
+                      Share notes, assignments, and study materials directly in your conversations.
+                    </p>
+
+                  </div>
+                </Col>
+              </Row>
+            </Grid>
+          </div>
         </Container>
       </section>
 
@@ -491,13 +363,13 @@ const LandingPage = () => {
         <Container>
           <Grid>
             <Row>
-              <Col xs={24} md={6}>
+              <Col xs={24} md={8}>
                 <div className="footer-logo">
                   <h2>StudySphere</h2>
                   <p>Connect, collaborate, and learn together</p>
                 </div>
               </Col>
-              <Col xs={24} md={6}>
+              <Col xs={24} md={8}>
                 <div className="footer-links">
                   <h3>Quick Links</h3>
                   <ul>
@@ -508,18 +380,7 @@ const LandingPage = () => {
                   </ul>
                 </div>
               </Col>
-              <Col xs={24} md={6}>
-                <div className="footer-links">
-                  <h3>Resources</h3>
-                  <ul>
-                    <li><a href="#">Help Center</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                  </ul>
-                </div>
-              </Col>
-              <Col xs={24} md={6}>
+              <Col xs={24} md={8}>
                 <div className="footer-social">
                   <h3>Connect With Us</h3>
                   <div className="social-icons">

@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import LandingPage from "./pages/LandingPage";
 import "./styles/main.scss";
+import "./styles/sweetalert-custom.css";
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
         <Route exact path="/">
           <LandingPage />
         </Route>
+
+        <PrivateRoute path="/dashboard">
+          <Home />
+        </PrivateRoute>
 
         <PrivateRoute path="/chat">
           <Home />

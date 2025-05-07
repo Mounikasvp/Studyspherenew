@@ -17,9 +17,9 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, 
-    rgba(79, 70, 229, 0.2) 0%, 
-    rgba(124, 58, 237, 0.8) 50%, 
+  background: linear-gradient(90deg,
+    rgba(79, 70, 229, 0.2) 0%,
+    rgba(124, 58, 237, 0.8) 50%,
     rgba(79, 70, 229, 0.2) 100%);
   animation: pulse 1.5s infinite;
 }

@@ -21,7 +21,7 @@
     "react-scripts": "5.0.1",
     "rsuite": "^5.22.1",
     "sass": "^1.56.1",
-    "sweetalert2": "^11.19.1",
+    "sweetalert2": "^11.21.0",
     "timeago-react": "^3.0.5",
     "use-context-selector": "^1.4.1",
     "web-vitals": "^2.1.4"
