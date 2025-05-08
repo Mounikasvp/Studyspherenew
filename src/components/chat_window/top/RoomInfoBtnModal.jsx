@@ -3,11 +3,11 @@ import { Button, Modal, Tag } from "rsuite";
 import { useCurrentRoom } from "../../../context/current-room.context";
 import { useModalState } from "../../../misc/custom-hooks";
 import { useParams } from "react-router";
-import { database, auth } from "../../../misc/firebase.config";
+import { database } from "../../../misc/firebase.config";
 import { ref, get } from "firebase/database";
 import InviteUsersModal from "../../rooms/InviteUsersModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle, faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
 const RoomInfoBtnModal = () => {
   const { isOpen, open, close } = useModalState();

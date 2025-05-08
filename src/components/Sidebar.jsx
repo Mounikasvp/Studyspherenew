@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Divider, ButtonGroup, Button, Toggle, InputGroup, Input } from "rsuite";
+import { Divider, Toggle, InputGroup, Input } from "rsuite";
 import CreateRoomBtnModal from "./CreateRoomBtnModal";
 import JoinRoomModal from "./JoinRoomModal";
 import DashboardToggle from "./dashboard/DashboardToggle";
 import ChatRoomList from "./rooms/ChatRoomList";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers, faGlobe, faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = () => {
   const topSidebarRef = useRef();

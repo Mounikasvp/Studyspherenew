@@ -3,7 +3,7 @@ import TimeAgo from "timeago-react";
 import ProfileAvatar from "../ProfileAvatar";
 import { Button, Whisper, Tooltip, Badge } from "rsuite";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy, faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { auth } from "../../misc/firebase.config";
 
 const RoomItem = ({ room }) => {

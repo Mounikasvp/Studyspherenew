@@ -8,8 +8,7 @@ import { CurrentRoomProvider } from "../../context/current-room.context";
 import { useRooms } from "../../context/rooms.context";
 import { auth } from "../../misc/firebase.config";
 import { transformToArr } from "../../misc/helpers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+
 
 const Chat = () => {
   const { chatId } = useParams();

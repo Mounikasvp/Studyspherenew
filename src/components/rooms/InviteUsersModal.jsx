@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Message, toaster, List, Avatar, Tag } from 'rsuite';
+import { Modal, Button, Message, toaster, Avatar, Tag } from 'rsuite';
 import { useModalState } from '../../misc/custom-hooks';
 import UserSearch from '../UserSearch';
 import { createInvitation } from '../../misc/invitation-service';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 const InviteUsersModal = ({ roomId, roomName, currentMembers = [] }) => {
   const { isOpen, open, close } = useModalState();

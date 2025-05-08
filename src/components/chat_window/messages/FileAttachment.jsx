@@ -12,8 +12,7 @@ import {
   faFileCode,
   faFileAlt,
   faFile,
-  faDownload,
-  faEye
+  faDownload
 } from '@fortawesome/free-solid-svg-icons';
 import { useModalState } from '../../../misc/custom-hooks';
 import '../../../styles/file-attachment.css';

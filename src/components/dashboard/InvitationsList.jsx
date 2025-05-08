@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { List, Button, Loader, Panel, Badge, Placeholder } from 'rsuite';
-import { getReceivedInvitations, acceptInvitation, declineInvitation } from '../../misc/invitation-service';
+import { List, Button, Panel, Badge, Placeholder } from 'rsuite';
+import { acceptInvitation, declineInvitation } from '../../misc/invitation-service';
 import { database } from '../../misc/firebase.config';
 import { ref, onValue, off } from 'firebase/database';
 import { useProfile } from '../../context/profile.context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes, faEnvelope, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
 import { showSuccessAlert, showErrorAlert, showInfoAlert } from '../../misc/sweet-alert';
 
 const InvitationsList = () => {

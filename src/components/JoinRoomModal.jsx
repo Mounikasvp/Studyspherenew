@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Button, Form, Input, Modal } from "rsuite";
+import { Button, Form, Modal } from "rsuite";
 import { useModalState } from "../misc/custom-hooks";
 import { ref, get, set, serverTimestamp } from "firebase/database";
 import { database, auth } from "../misc/firebase.config";

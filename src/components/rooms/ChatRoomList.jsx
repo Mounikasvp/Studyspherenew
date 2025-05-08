@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Loader, Nav, Message, Button } from "rsuite";
+import { Loader, Nav, Message } from "rsuite";
 import { useRooms } from "../../context/rooms.context";
 import { useProfile } from "../../context/profile.context";
 import RoomItem from "./RoomItem";
 import { database, auth } from "../../misc/firebase.config";
 import { ref, onValue, off } from "firebase/database";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
 
 const ChatRoomList = ({ aboveElHeight, showOnlyJoined = true, searchQuery = '' }) => {
   const rooms = useRooms();

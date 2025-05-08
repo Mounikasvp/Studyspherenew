@@ -1,9 +1,8 @@
 import React, { useState, useCallback, useRef } from "react";
-import { InputGroup, Message, toaster, Modal, Button } from "rsuite";
+import { Message, toaster, Modal, Button } from "rsuite";
 import { useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone, faPlay, faPause, faPaperPlane, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { showToast } from "../../../misc/sweet-alert";
 import { AudioRecorder } from 'react-audio-voice-recorder';
 import "../../../styles/audio-preview.css";
 

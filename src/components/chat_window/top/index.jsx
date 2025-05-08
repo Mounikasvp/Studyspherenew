@@ -2,11 +2,10 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { useCurrentRoom } from "../../../context/current-room.context";
 import { useMediaQuery } from "../../../misc/custom-hooks";
-import { ButtonToolbar } from "rsuite";
 import RoomInfoBtnModal from "./RoomInfoBtnModal";
 import EditRoomBtnDrawer from "./EditRoomBtnDrawer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const ChatTop = () => {
   const name = useCurrentRoom((v) => v.name);
