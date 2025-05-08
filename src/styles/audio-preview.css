@@ -36,20 +36,32 @@
   }
 }
 
-.audio-btn.animate-blink {
-  animation: blink 1s infinite;
+/* Audio recorder styling */
+.audio-recorder-wrapper {
+  display: flex;
+  align-items: center;
 }
 
-@keyframes blink {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
+/* Override the default styles of react-audio-voice-recorder */
+.audio-recorder {
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  background-color: #4f46e5 !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+.audio-recorder-mic {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.audio-recorder-status {
+  display: none !important;
+}
+
+.audio-recorder-options {
+  display: none !important;
 }
 
 .mx-2 {

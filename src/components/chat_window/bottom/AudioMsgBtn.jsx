@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useRef } from "react";
 import { InputGroup, Message, toaster, Modal, Button } from "rsuite";
-import { ReactMic } from "react-mic";
 import { useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone, faPlay, faPause, faPaperPlane, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { showToast } from "../../../misc/sweet-alert";
+import { AudioRecorder } from 'react-audio-voice-recorder';
 import "../../../styles/audio-preview.css";
 
 const AudioMsgBtn = ({ afterUpload }) => {
@@ -14,7 +14,6 @@ const AudioMsgBtn = ({ afterUpload }) => {
   // Use a ref to store the chatId at the time recording starts
   const recordingChatIdRef = useRef(null);
 
-  const [isRecording, setIsRecording] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -24,27 +23,19 @@ const AudioMsgBtn = ({ afterUpload }) => {
   // Reference to the audio element
   const audioRef = useRef(null);
 
-  const onClick = useCallback(() => {
-    // If starting recording, store the current chatId
-    if (!isRecording) {
-      recordingChatIdRef.current = chatId;
-      console.log(`Recording started in chat: ${recordingChatIdRef.current}`);
-    }
-    setIsRecording((p) => !p);
-  }, [isRecording, chatId]);
-
-  // Handle when recording stops
-  const onStop = useCallback((data) => {
-    console.log('Recording stopped, preparing preview');
+  // Handle when recording completes
+  const addAudioElement = useCallback((blob) => {
+    console.log('Recording completed, preparing preview');
+    recordingChatIdRef.current = chatId;
 
     // Create URL for the audio blob
-    const audioUrl = URL.createObjectURL(data.blob);
-    setAudioBlob(data.blob);
+    const audioUrl = URL.createObjectURL(blob);
+    setAudioBlob(blob);
     setAudioUrl(audioUrl);
 
     // Show the preview modal
     setShowPreviewModal(true);
-  }, []);
+  }, [chatId]);
 
   // Toggle play/pause of the audio preview
   const togglePlayPause = useCallback(() => {
@@ -143,19 +134,18 @@ const AudioMsgBtn = ({ afterUpload }) => {
 
   return (
     <>
-      <InputGroup.Button
-        onClick={onClick}
-        disabled={isUploading}
-        className={`audio-btn ${isRecording ? "animate-blink" : ""}`}
-      >
-        <FontAwesomeIcon icon={faMicrophone} />
-        <ReactMic
-          record={isRecording}
-          className="d-none"
-          onStop={onStop}
-          mimeType="audio/mp3"
+      <div className="audio-recorder-wrapper">
+        <AudioRecorder
+          onRecordingComplete={addAudioElement}
+          audioTrackConstraints={{
+            noiseSuppression: true,
+            echoCancellation: true,
+          }}
+          downloadOnSavePress={false}
+          downloadFileExtension="mp3"
+          showVisualizer={true}
         />
-      </InputGroup.Button>
+      </div>
 
       {/* Audio Preview Modal */}
       <Modal open={showPreviewModal} onClose={handleCancel} size="xs">
