@@ -8,14 +8,27 @@ $dark-color: #1e293b; // Slate dark
 $light-color: #f8fafc; // Slate lightest
 $accent-color: #8b5cf6; // Violet
 
-// Remove all underlines from links
-a, button, .close-menu, .close-icon {
+// Remove all underlines from links and outlines from interactive elements
+a, button, .close-menu, .close-icon, .hamburger-menu, .landing-nav ul li, .landing-nav ul li a, .hamburger-line {
   text-decoration: none !important;
   border-bottom: none !important;
+  outline: none !important;
+  border: none !important;
+  -webkit-tap-highlight-color: transparent !important;
 
   &:after, &:before {
     text-decoration: none !important;
     border-bottom: none !important;
+    outline: none !important;
+    border: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  &:focus, &:active, &:hover {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    -webkit-tap-highlight-color: transparent !important;
   }
 }
 
@@ -428,17 +441,42 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
     margin-right: 5px;
     transition: all 0.3s ease;
     background: transparent;
-    border: none;
+    border: none !important;
     border-radius: 5px;
-    outline: none;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    border-style: none !important;
+    box-shadow: none !important;
+
+    /* Explicitly remove dotted lines in all states */
+    &:focus, &:active, &:hover, &:focus-visible, &:focus-within {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      border-style: none !important;
+    }
 
     &:hover {
       transform: scale(1.1);
       background: rgba(255, 255, 255, 0.1);
     }
 
-    &:focus {
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+    &:focus, &:active, &:hover, &:focus-visible, &:focus-within {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      border-style: none !important;
     }
 
     .hamburger-line {
@@ -449,6 +487,45 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
       border-radius: 5px;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       margin: 3px 0;
+      border: none !important;
+      outline: none !important;
+      text-decoration: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      border-style: none !important;
+
+      /* Explicitly remove dotted lines */
+      &::before, &::after {
+        border: none !important;
+        outline: none !important;
+        text-decoration: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+
+      /* Explicitly remove dotted lines in all states */
+      &:focus, &:active, &:hover, &:focus-visible, &:focus-within {
+        outline: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        border-style: none !important;
+      }
+
+      &:focus, &:active, &:hover, &:focus-visible, &:focus-within {
+        outline: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        border-style: none !important;
+      }
 
       &.open {
         &:nth-child(1) {
@@ -558,6 +635,36 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
       padding: 20px;
       box-sizing: border-box;
       transition: all 0.3s ease;
+      border: none !important;
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      border-style: none !important;
+
+      /* Ensure no dotted lines in mobile navigation */
+      *, *:before, *:after, ul, li, a, button, div {
+        border: none !important;
+        text-decoration: none !important;
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        border-style: none !important;
+        box-shadow: none !important;
+      }
+
+      &:focus, &:active, &:hover, &:focus-visible, &:focus-within {
+        border: none !important;
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        border-style: none !important;
+      }
 
       .close-menu {
         position: absolute;
@@ -635,13 +742,18 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
         margin: 0;
         min-height: 100%;
         box-sizing: border-box;
+        border: none !important;
+        outline: none !important;
 
         li {
           margin: 0 0 15px 0;
           width: 100%;
           text-align: center;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+          border: none !important; /* Removed dotted line */
+          border-bottom: none !important; /* Removed dotted line */
           padding-bottom: 15px;
+          outline: none !important;
+          -webkit-tap-highlight-color: transparent !important;
 
           a {
             font-size: 1.5rem;
@@ -649,19 +761,35 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
             padding: 15px;
             color: white;
             font-weight: 600;
-            text-decoration: none;
+            text-decoration: none !important;
             background-color: rgba(255, 255, 255, 0.15);
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
+            border: none !important;
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+            border-style: none !important;
 
-            &:hover, &:active {
+            &:hover, &:active, &:focus, &:focus-visible, &:focus-within {
               background-color: rgba(255, 255, 255, 0.25);
               transform: translateY(-2px);
+              border: none !important;
+              outline: none !important;
+              -webkit-tap-highlight-color: transparent !important;
+              -webkit-appearance: none !important;
+              -moz-appearance: none !important;
+              appearance: none !important;
+              border-style: none !important;
             }
 
             &:after {
-              display: none;
+              display: none !important;
+              border: none !important;
+              outline: none !important;
             }
           }
 
@@ -1733,6 +1861,7 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
 
       li {
         margin-bottom: 0.75rem;
+        border: none; /* Ensure no borders */
 
         a {
           color: rgba($light-text, 0.7);
@@ -1741,6 +1870,7 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
           font-weight: 500;
           position: relative;
           padding-left: 0;
+          border: none; /* Ensure no borders */
 
           &:hover {
             color: $light-text;
@@ -1809,6 +1939,21 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
 
 // Responsive Styles
 @media (max-width: 1200px) {
+  /* Ensure no dotted lines around hamburger menu in large screens */
+  .hamburger-menu, .hamburger-line,
+  .hamburger-menu:focus, .hamburger-menu:active, .hamburger-menu:hover, .hamburger-menu:focus-visible, .hamburger-menu:focus-within,
+  .hamburger-line:focus, .hamburger-line:active, .hamburger-line:hover, .hamburger-line:focus-visible, .hamburger-line:focus-within {
+    border: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    border-style: none !important;
+    box-shadow: none !important;
+  }
+
   .landing-header {
     width: calc(100% - 2rem);
     top: 1rem;
@@ -1858,6 +2003,21 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
 }
 
 @media (max-width: 992px) {
+  /* Ensure no dotted lines around hamburger menu in tablet screens */
+  .hamburger-menu, .hamburger-line,
+  .hamburger-menu:focus, .hamburger-menu:active, .hamburger-menu:hover, .hamburger-menu:focus-visible, .hamburger-menu:focus-within,
+  .hamburger-line:focus, .hamburger-line:active, .hamburger-line:hover, .hamburger-line:focus-visible, .hamburger-line:focus-within {
+    border: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    border-style: none !important;
+    box-shadow: none !important;
+  }
+
   .landing-header {
     padding: 1rem 1.5rem;
 
@@ -1884,6 +2044,23 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
       animation: fadeIn 0.3s ease;
       backdrop-filter: blur(3px);
       -webkit-backdrop-filter: blur(3px);
+      border: none !important;
+      outline: none !important;
+      -webkit-tap-highlight-color: transparent !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      border-style: none !important;
+
+      &:focus, &:active, &:hover, &:focus-visible, &:focus-within {
+        border: none !important;
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        border-style: none !important;
+      }
     }
 
     @keyframes fadeIn {
@@ -1940,6 +2117,21 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
 }
 
 @media (max-width: 768px) {
+  /* Ensure no dotted lines around hamburger menu in mobile screens */
+  .hamburger-menu, .hamburger-line,
+  .hamburger-menu:focus, .hamburger-menu:active, .hamburger-menu:hover, .hamburger-menu:focus-visible, .hamburger-menu:focus-within,
+  .hamburger-line:focus, .hamburger-line:active, .hamburger-line:hover, .hamburger-line:focus-visible, .hamburger-line:focus-within {
+    border: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    border-style: none !important;
+    box-shadow: none !important;
+  }
+
   .landing-header {
     padding: 1rem;
     width: calc(100% - 1.5rem);
@@ -2051,9 +2243,11 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
 
         li {
           margin-bottom: 0.5rem;
+          border: none; /* Ensure no borders */
 
           a {
             font-size: 0.9rem;
+            border: none; /* Ensure no borders */
           }
         }
       }
@@ -2082,6 +2276,21 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
 }
 
 @media (max-width: 576px) {
+  /* Ensure no dotted lines around hamburger menu in smallest screens */
+  .hamburger-menu, .hamburger-line,
+  .hamburger-menu:focus, .hamburger-menu:active, .hamburger-menu:hover, .hamburger-menu:focus-visible, .hamburger-menu:focus-within,
+  .hamburger-line:focus, .hamburger-line:active, .hamburger-line:hover, .hamburger-line:focus-visible, .hamburger-line:focus-within {
+    border: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    border-style: none !important;
+    box-shadow: none !important;
+  }
+
   .hero-section {
     padding: 120px 0 50px;
 
@@ -2159,5 +2368,4 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   }
 }
-
 

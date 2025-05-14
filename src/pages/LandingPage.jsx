@@ -16,6 +16,30 @@ const LandingPage = () => {
       offset: 50
     });
 
+    // Add a style element to remove all outlines
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+      * {
+        outline: none !important;
+      }
+
+      #mobile-nav, #mobile-nav:hover, #mobile-nav:focus, #mobile-nav:active,
+      .menu-backdrop, .menu-backdrop:hover, .menu-backdrop:focus, .menu-backdrop:active {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        border-style: none !important;
+        outline-style: none !important;
+        outline-width: 0 !important;
+        outline-color: transparent !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+
     // Handle navbar scroll behavior
     const handleScroll = () => {
       const header = document.querySelector('.landing-header');
@@ -48,8 +72,15 @@ const LandingPage = () => {
     // Prevent body scrolling when mobile menu is open
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
+      // Add styles to prevent dotted lines
+      document.body.style.WebkitTapHighlightColor = 'transparent';
+      document.body.style.outline = 'none';
+      document.body.style.border = 'none';
     } else {
       document.body.style.overflow = '';
+      document.body.style.WebkitTapHighlightColor = '';
+      document.body.style.outline = '';
+      document.body.style.border = '';
     }
 
     window.addEventListener('scroll', handleScroll);
@@ -65,6 +96,14 @@ const LandingPage = () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscKey);
       document.body.style.overflow = '';
+
+      // Remove the style element
+      const styleElements = document.querySelectorAll('style');
+      styleElements.forEach(element => {
+        if (element.textContent.includes('#mobile-nav')) {
+          element.remove();
+        }
+      });
     };
   }, [mobileMenuOpen]);
 
@@ -82,49 +121,208 @@ const LandingPage = () => {
           aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-nav"
+          style={{
+            border: 'none',
+            outline: 'none',
+            WebkitTapHighlightColor: 'transparent',
+            WebkitAppearance: 'none',
+            MozAppearance: 'none',
+            appearance: 'none',
+            borderStyle: 'none',
+            boxShadow: 'none'
+          }}
         >
-          <div className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></div>
-          <div className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></div>
-          <div className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></div>
+          <div
+            className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}
+            style={{
+              border: 'none',
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              borderStyle: 'none',
+              boxShadow: 'none',
+              textDecoration: 'none'
+            }}
+          ></div>
+          <div
+            className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}
+            style={{
+              border: 'none',
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              borderStyle: 'none',
+              boxShadow: 'none',
+              textDecoration: 'none'
+            }}
+          ></div>
+          <div
+            className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}
+            style={{
+              border: 'none',
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent',
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+              borderStyle: 'none',
+              boxShadow: 'none',
+              textDecoration: 'none'
+            }}
+          ></div>
         </button>
-        <nav id="mobile-nav" className={`landing-nav ${mobileMenuOpen ? 'mobile-open' : ''}`}>
-          <ul>
-            <li>
+        <nav
+          id="mobile-nav"
+          className={`landing-nav ${mobileMenuOpen ? 'mobile-open' : ''}`}
+          style={{
+            border: 'none !important',
+            outline: 'none !important',
+            WebkitTapHighlightColor: 'transparent !important',
+            WebkitAppearance: 'none !important',
+            MozAppearance: 'none !important',
+            appearance: 'none !important',
+            borderStyle: 'none !important',
+            boxShadow: 'none !important',
+            textDecoration: 'none !important',
+            outlineStyle: 'none !important',
+            outlineWidth: '0 !important',
+            outlineColor: 'transparent !important'
+          }}
+          tabIndex="-1"
+        >
+          <ul style={{
+            border: 'none',
+            outline: 'none',
+            WebkitTapHighlightColor: 'transparent'
+          }}>
+            <li style={{
+              border: 'none',
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent'
+            }}>
               <a
                 href="#features"
                 onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  border: 'none',
+                  outline: 'none',
+                  WebkitTapHighlightColor: 'transparent',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  borderStyle: 'none'
+                }}
               >
                 Features
               </a>
             </li>
-            <li>
+            <li style={{
+              border: 'none',
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent'
+            }}>
               <a
                 href="#how-it-works"
                 onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  border: 'none',
+                  outline: 'none',
+                  WebkitTapHighlightColor: 'transparent',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  borderStyle: 'none'
+                }}
               >
                 How It Works
               </a>
             </li>
-            <li>
+            <li style={{
+              border: 'none',
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent'
+            }}>
               <a
                 href="#testimonials"
                 onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  border: 'none',
+                  outline: 'none',
+                  WebkitTapHighlightColor: 'transparent',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  borderStyle: 'none'
+                }}
               >
                 Testimonials
               </a>
             </li>
-            <li>
+            <li style={{
+              border: 'none',
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent'
+            }}>
               <Link
                 to="/signin"
                 onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  border: 'none',
+                  outline: 'none',
+                  WebkitTapHighlightColor: 'transparent',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  borderStyle: 'none'
+                }}
               >
-                <Button appearance="primary" className="gradient-btn">Sign In</Button>
+                <Button
+                  appearance="primary"
+                  className="gradient-btn"
+                  style={{
+                    border: 'none',
+                    outline: 'none',
+                    WebkitTapHighlightColor: 'transparent',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    appearance: 'none',
+                    borderStyle: 'none'
+                  }}
+                >
+                  Sign In
+                </Button>
               </Link>
             </li>
           </ul>
         </nav>
-        {mobileMenuOpen && <div className="menu-backdrop" onClick={() => setMobileMenuOpen(false)}></div>}
+        {mobileMenuOpen &&
+          <div
+            className="menu-backdrop"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              border: 'none !important',
+              outline: 'none !important',
+              WebkitTapHighlightColor: 'transparent !important',
+              WebkitAppearance: 'none !important',
+              MozAppearance: 'none !important',
+              appearance: 'none !important',
+              borderStyle: 'none !important',
+              boxShadow: 'none !important',
+              textDecoration: 'none !important',
+              outlineStyle: 'none !important',
+              outlineWidth: '0 !important',
+              outlineColor: 'transparent !important'
+            }}
+            tabIndex="-1"
+          ></div>
+        }
       </header>
+
+
 
       {/* Hero Section */}
       <section className="hero-section">
@@ -143,11 +341,11 @@ const LandingPage = () => {
                 <div className="hero-content">
                   <h1>
                     Connect, Collaborate,
-                    <span className="gradient-text"> and Learn</span> Together
+                    <span className="white-text"> & Learn</span>
                   </h1>
                   <p className="hero-subtitle">
-                    Experience the future of collaborative learning with our real-time
-                    platform designed for modern students and educators.
+                    Experience collaborative learning with our real-time
+                    platform for students and educators.
                   </p>
                   <div className="hero-buttons">
                     <Link to="/signin">
@@ -166,7 +364,7 @@ const LandingPage = () => {
                       <span>Live Chat</span>
                     </div>
                     <div className="float-card card-2">
-                      <i className="fa-light fa-note"></i>
+                      <i className="fa-solid fa-book"></i>
                       <span>Sharing Notes</span>
                     </div>
                     <div className="float-card card-3">
@@ -180,17 +378,7 @@ const LandingPage = () => {
                         <i className="fa-solid fa-graduation-cap"></i>
                       </div>
                       <h3>StudySphere</h3>
-                      <p>Connect, collaborate, and learn together</p>
-                      <div className="placeholder-stats">
-                        <div className="stat-item">
-                          <i className="fa-solid fa-users"></i>
-                          <span>500+ Study Groups</span>
-                        </div>
-                        <div className="stat-item">
-                          <i className="fa-solid fa-message"></i>
-                          <span>Real-time Messaging</span>
-                        </div>
-                      </div>
+                      <p>Connect, collaborate, and <span className="white-text">learn</span> together</p>
                     </div>
                   </div>
                 </div>
@@ -205,8 +393,8 @@ const LandingPage = () => {
         <Container>
           <div className="section-title">
             <div className="badge">FEATURES</div>
-            <h2>Everything you need to succeed</h2>
-            <p>Powerful tools designed to enhance your learning experience</p>
+            <h2>Tools for success</h2>
+            <p>Enhance your learning experience</p>
           </div>
 
           <div className="features-grid">
@@ -217,9 +405,9 @@ const LandingPage = () => {
                     <div className="feature-icon">
                       <i className="fa-solid fa-comments"></i>
                     </div>
-                    <h3>Real-time Messaging</h3>
+                    <h3>Messaging</h3>
                     <p>
-                      Experience seamless communication with instant messaging.
+                      Seamless real-time communication.
                     </p>
                   </div>
                 </Col>
@@ -231,9 +419,8 @@ const LandingPage = () => {
                     </div>
                     <h3>Study Groups</h3>
                     <p>
-                      Create dedicated spaces for different subjects, projects, or study groups.
+                      Create spaces for subjects and projects.
                     </p>
-
                   </div>
                 </Col>
 
@@ -244,9 +431,8 @@ const LandingPage = () => {
                     </div>
                     <h3>File Sharing</h3>
                     <p>
-                      Share notes, assignments, and study materials directly in your conversations.
+                      Share notes and materials in chats.
                     </p>
-
                   </div>
                 </Col>
               </Row>
@@ -293,7 +479,7 @@ const LandingPage = () => {
               <Col xs={24} md={8}>
                 <div className="testimonial-card">
                   <div className="testimonial-content">
-                    <p>"StudySphere has transformed how our study group collaborates. We can share notes and discuss concepts in real-time!"</p>
+                    <p>"StudySphere transformed our study group. We share notes and discuss in real-time!"</p>
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar">
@@ -309,7 +495,7 @@ const LandingPage = () => {
               <Col xs={24} md={8}>
                 <div className="testimonial-card">
                   <div className="testimonial-content">
-                    <p>"As a teaching assistant, StudySphere helps me stay connected with students and answer their questions efficiently."</p>
+                    <p>"As a TA, StudySphere helps me connect with students and answer questions quickly."</p>
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar">
@@ -325,7 +511,7 @@ const LandingPage = () => {
               <Col xs={24} md={8}>
                 <div className="testimonial-card">
                   <div className="testimonial-content">
-                    <p>"The voice message feature is perfect for explaining complex math problems that are hard to type out."</p>
+                    <p>"Voice messages help me explain math problems that are hard to type."</p>
                   </div>
                   <div className="testimonial-author">
                     <div className="author-avatar">
@@ -347,8 +533,8 @@ const LandingPage = () => {
       <section className="cta-section">
         <Container>
           <div className="cta-content">
-            <h2>Ready to Transform Your Study Experience?</h2>
-            <p>Join thousands of students who are already using StudySphere to collaborate and learn together.</p>
+            <h2>Ready to Transform Your Studies?</h2>
+            <p>Join students using StudySphere to learn together.</p>
             <Link to="/signin">
               <Button appearance="primary" color="green" size="lg">
                 Get Started Now
@@ -362,14 +548,8 @@ const LandingPage = () => {
       <footer className="landing-footer">
         <Container>
           <Grid>
-            <Row>
-              <Col xs={24} md={8}>
-                <div className="footer-logo">
-                  <h2>StudySphere</h2>
-                  <p>Connect, collaborate, and learn together</p>
-                </div>
-              </Col>
-              <Col xs={24} md={8}>
+            <Row className="centered-footer-row">
+              <Col xs={24} md={12} className="footer-col">
                 <div className="footer-links">
                   <h3>Quick Links</h3>
                   <ul>
@@ -380,7 +560,7 @@ const LandingPage = () => {
                   </ul>
                 </div>
               </Col>
-              <Col xs={24} md={8}>
+              <Col xs={24} md={12} className="footer-col">
                 <div className="footer-social">
                   <h3>Connect With Us</h3>
                   <div className="social-icons">
@@ -392,7 +572,7 @@ const LandingPage = () => {
                 </div>
               </Col>
             </Row>
-            <Row>
+            <Row className="centered-footer-row">
               <Col xs={24}>
                 <div className="copyright">
                   <p>&copy; {new Date().getFullYear()} StudySphere. All rights reserved.</p>
