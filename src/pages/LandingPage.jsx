@@ -579,7 +579,7 @@ const LandingPage = () => {
                     <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
-                    <li><a href="#contact">Contact Us</a></li>
+                    <li><button className="footer-link-button" onClick={() => window.location.href = '/contact'}>Contact Us</button></li>
                   </ul>
                 </div>
               </Col>
