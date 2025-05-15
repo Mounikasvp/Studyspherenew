@@ -579,7 +579,7 @@ const LandingPage = () => {
                     <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
                   </ul>
                 </div>
               </Col>
