@@ -7,6 +7,24 @@ import 'aos/dist/aos.css';
 
 const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    // We don't need to check screen size anymore since we're using CSS media queries
+    // But we'll keep the state for future use if needed
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth <= 320);
+    };
+
+    // Initial check
+    checkScreenSize();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -543,36 +561,30 @@ const LandingPage = () => {
           </div>
         </Container>
       </section>
-
-      {/* Footer */}
-      <footer className="landing-footer">
-        <Container>
+{/* footer */}
+<footer className="landing-footer">
+        <Container className="footer-container">
           <Grid>
-            <Row className="centered-footer-row">
-              <Col xs={24} md={12} className="footer-col">
+            <Row className="footer-main-row">
+              <Col xs={24} md={6} className="footer-col">
+                <div className="footer-logo">
+                  <h2 className="footer-title">StudySphere</h2>
+                  <p>Connect, collaborate, and learn together</p>
+                </div>
+              </Col>
+              <Col xs={24} md={6} className="footer-col">
                 <div className="footer-links">
                   <h3>Quick Links</h3>
                   <ul>
                     <li><a href="#features">Features</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
-                    <li><Link to="/signin">Sign In</Link></li>
+                    <li><a href="#">Contact Us</a></li>
                   </ul>
                 </div>
               </Col>
-              <Col xs={24} md={12} className="footer-col">
-                <div className="footer-social">
-                  <h3>Connect With Us</h3>
-                  <div className="social-icons">
-                    <button className="social-btn"><i className="fa-brands fa-facebook"></i></button>
-                    <button className="social-btn"><i className="fa-brands fa-twitter"></i></button>
-                    <button className="social-btn"><i className="fa-brands fa-instagram"></i></button>
-                    <button className="social-btn"><i className="fa-brands fa-linkedin"></i></button>
-                  </div>
-                </div>
-              </Col>
             </Row>
-            <Row className="centered-footer-row">
+            <Row className="footer-copyright-row">
               <Col xs={24}>
                 <div className="copyright">
                   <p>&copy; {new Date().getFullYear()} StudySphere. All rights reserved.</p>
@@ -585,9 +597,6 @@ const LandingPage = () => {
     </div>
   );
 };
-
-
-
 export default LandingPage;
 
 
