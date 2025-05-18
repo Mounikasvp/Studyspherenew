@@ -40,6 +40,12 @@
 .audio-recorder-wrapper {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  position: relative;
+  padding: 0;
+  margin: 0;
 }
 
 /* Override the default styles of react-audio-voice-recorder */
@@ -49,11 +55,24 @@
   height: 36px !important;
   background-color: #4f46e5 !important;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: absolute !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 .audio-recorder-mic {
   width: 18px !important;
   height: 18px !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 .audio-recorder-status {
@@ -61,6 +80,11 @@
 }
 
 .audio-recorder-options {
+  display: none !important;
+}
+
+.audio-recorder-timer,
+.hide-timer {
   display: none !important;
 }
 
@@ -75,4 +99,60 @@
 
 .mb-3 {
   margin-bottom: 1rem;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 425px) {
+  .audio-recorder-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  .audio-recorder {
+    width: 32px !important;
+    height: 32px !important;
+    position: absolute !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .audio-recorder-mic {
+    width: 16px !important;
+    height: 16px !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
+/* Media query for 320px screen size */
+@media (max-width: 320px) {
+  .audio-recorder-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .audio-recorder {
+    width: 28px !important;
+    height: 28px !important;
+    position: absolute !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  .audio-recorder-mic {
+    width: 14px !important;
+    height: 14px !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
 }

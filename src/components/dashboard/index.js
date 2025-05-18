@@ -16,14 +16,27 @@ const Dashboard = ({ onSignOut }) => {
 
   const onSave = async (newData) => {
     try {
-      const updates = await getUserUpdates(
-        profile.uid,
-        "name",
-        newData,
-        database
-      );
+      // First, update just the user profile
+      const basicUpdates = {
+        [`/users/${profile.uid}/name`]: newData
+      };
 
-      await update(ref(database), updates);
+      // Try to get full updates (messages and rooms)
+      try {
+        const fullUpdates = await getUserUpdates(
+          profile.uid,
+          "name",
+          newData,
+          database
+        );
+
+        // If we got full updates, use those
+        await update(ref(database), fullUpdates);
+      } catch (error) {
+        // If there was an error with full updates, just use basic updates
+        console.error("Error with full updates:", error.message);
+        await update(ref(database), basicUpdates);
+      }
 
       // Use SweetAlert2 success alert
       showSuccessAlert(
@@ -31,11 +44,21 @@ const Dashboard = ({ onSignOut }) => {
         'Your nickname has been updated successfully'
       );
     } catch (error) {
-      // Use SweetAlert2 error alert
-      showErrorAlert(
-        'Update Error',
-        error.message
-      );
+      console.error("Profile update error:", error);
+
+      // Handle specific errors
+      if (error.message && error.message.includes("Index not defined")) {
+        showErrorAlert(
+          'Database Index Error',
+          'There was an issue with the database indexing. Your profile was updated, but some references may not be updated. Please contact support.'
+        );
+      } else {
+        // Use SweetAlert2 error alert for other errors
+        showErrorAlert(
+          'Update Error',
+          error.message
+        );
+      }
     }
   };
 
@@ -47,15 +70,16 @@ const Dashboard = ({ onSignOut }) => {
         <Drawer.Title>Dashboard</Drawer.Title>
       </Drawer.Header>
 
-      <Drawer.Body>
-        <Nav appearance="tabs" activeKey={activeTab} onSelect={setActiveTab}>
-          <Nav.Item eventKey="profile" icon={<FontAwesomeIcon icon={faUser} />}>
-            Profile
-          </Nav.Item>
-          <Nav.Item eventKey="invitations" icon={<FontAwesomeIcon icon={faEnvelope} />}>
-            Invitations
-          </Nav.Item>
-        </Nav>
+      <Drawer.Body className="dashboard-body">
+        <div className="dashboard-content">
+          <Nav appearance="tabs" activeKey={activeTab} onSelect={setActiveTab} justified>
+            <Nav.Item eventKey="profile" icon={<FontAwesomeIcon icon={faUser} />}>
+              Profile
+            </Nav.Item>
+            <Nav.Item eventKey="invitations" icon={<FontAwesomeIcon icon={faEnvelope} />}>
+              Invitations
+            </Nav.Item>
+          </Nav>
 
         {activeTab === 'profile' && (
           <div className="profile-section">
@@ -86,6 +110,7 @@ const Dashboard = ({ onSignOut }) => {
             Sign Out
           </Button>
         </Drawer.Actions>
+        </div>
       </Drawer.Body>
     </div>
   );

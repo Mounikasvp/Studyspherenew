@@ -95,7 +95,7 @@ const JoinRoomModal = () => {
         <FontAwesomeIcon icon={faSignInAlt} /> Join Room with Code
       </Button>
 
-      <Modal open={isOpen} onClose={close}>
+      <Modal open={isOpen} onClose={close} className="join-room-modal">
         <Modal.Header>
           <Modal.Title>Join a Study Group</Modal.Title>
         </Modal.Header>
@@ -108,6 +108,7 @@ const JoinRoomModal = () => {
                 placeholder="Enter 6-digit code..."
                 value={roomCode}
                 onChange={onCodeChange}
+                size="sm"
               />
               <Form.HelpText>
                 Enter the code provided by the room admin
@@ -121,12 +122,13 @@ const JoinRoomModal = () => {
             appearance="primary"
             onClick={onJoinRoom}
             disabled={isLoading}
+            size="sm"
             style={{
               background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
               color: 'white',
               border: 'none',
               borderRadius: '12px',
-              padding: '10px',
+              padding: '8px',
               fontWeight: '600'
             }}
           >

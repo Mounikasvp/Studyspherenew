@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   createUserWithEmailAndPassword,
@@ -12,8 +13,8 @@ import {
 import { ref, serverTimestamp, set } from "firebase/database";
 import { auth, database } from "../misc/firebase.config.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faLock, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import Swal from 'sweetalert2';
+import { faEnvelope, faLock, faArrowLeft, faUser } from "@fortawesome/free-solid-svg-icons";
+import Swal from "sweetalert2";
 
 const SignIn = () => {
   const history = useHistory();
@@ -21,10 +22,22 @@ const SignIn = () => {
     email: '',
     password: '',
   });
+
   const [isSignUp, setIsSignUp] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  // Form validation
+  const randomId = React.useMemo(() => Math.random().toString(36).substring(2, 15), []);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setFormValue({
+        email: '',
+        password: '',
+      });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const validateForm = () => {
     if (!formValue.email) {
       Swal.fire({
@@ -33,12 +46,6 @@ const SignIn = () => {
         icon: 'warning',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4f46e5',
-        showClass: {
-          popup: 'swal2-show'
-        },
-        hideClass: {
-          popup: 'swal2-hide'
-        }
       });
       return false;
     }
@@ -50,12 +57,6 @@ const SignIn = () => {
         icon: 'warning',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4f46e5',
-        showClass: {
-          popup: 'swal2-show'
-        },
-        hideClass: {
-          popup: 'swal2-hide'
-        }
       });
       return false;
     }
@@ -67,12 +68,6 @@ const SignIn = () => {
         icon: 'warning',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4f46e5',
-        showClass: {
-          popup: 'swal2-show'
-        },
-        hideClass: {
-          popup: 'swal2-hide'
-        }
       });
       return false;
     }
@@ -80,32 +75,68 @@ const SignIn = () => {
     return true;
   };
 
-  const handleEmailAuth = async () => {
-    if (!validateForm()) {
-      return;
-    }
+  const guestCredentials = {
+    email: "guest@studysphere.com",
+    password: "guest123"
+  };
 
+  const handleGuestLogin = async () => {
+    setIsLoading(true);
+
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        guestCredentials.email,
+        guestCredentials.password
+      );
+
+      await Swal.fire({
+        title: 'Welcome, Guest!',
+        text: 'You are now signed in as a guest user',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4f46e5',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: true,
+      });
+
+      history.push('/dashboard'); // Redirect after login
+    } catch (error) {
+      console.error('Guest login error:', error);
+
+      await Swal.fire({
+        title: 'Guest Login Failed',
+        text: 'Unable to sign in as guest. Please try again or use regular sign in.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4f46e5',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEmailAuth = async () => {
+    if (!validateForm()) return;
     setIsLoading(true);
 
     try {
       let credential;
 
       if (isSignUp) {
-        // Sign up with email/password
         credential = await createUserWithEmailAndPassword(
           auth,
           formValue.email,
           formValue.password
         );
 
-        // Create user profile in database
         await set(ref(database, "users/" + credential.user.uid), {
-          name: formValue.email.split('@')[0], // Use part of email as display name
+          name: formValue.email.split('@')[0],
           createdAt: serverTimestamp(),
-          avatar: null, // Add empty avatar field for profile completeness
+          avatar: null,
         });
       } else {
-        // Sign in with email/password
         credential = await signInWithEmailAndPassword(
           auth,
           formValue.email,
@@ -113,7 +144,6 @@ const SignIn = () => {
         );
       }
 
-      // Show success message with SweetAlert2
       await Swal.fire({
         title: 'Success!',
         text: isSignUp ? 'Account created successfully!' : 'Signed in successfully!',
@@ -123,55 +153,45 @@ const SignIn = () => {
         timer: 3000,
         timerProgressBar: true,
         showConfirmButton: true,
-        showClass: {
-          popup: 'swal2-show'
-        },
-        hideClass: {
-          popup: 'swal2-hide'
-        }
       });
 
-      // Navigate to dashboard or home page after successful login
-      if (!isSignUp) {
-        history.push('/dashboard'); // Redirect to dashboard after successful sign in
-      }
+      history.push('/dashboard');
     } catch (error) {
       console.error('Email authentication error:', error);
 
-      // Provide more user-friendly error messages
       let errorMessage = error.message;
       let errorTitle = 'Error';
 
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-        errorTitle = 'Authentication Failed';
-        errorMessage = 'Invalid email or password. Please try again.';
-      } else if (error.code === 'auth/email-already-in-use') {
-        errorTitle = 'Email Already Registered';
-        errorMessage = 'This email is already registered. Please sign in instead.';
-      } else if (error.code === 'auth/weak-password') {
-        errorTitle = 'Weak Password';
-        errorMessage = 'Password is too weak. Please use at least 6 characters.';
-      } else if (error.code === 'auth/invalid-email') {
-        errorTitle = 'Invalid Email';
-        errorMessage = 'Invalid email format. Please enter a valid email address.';
-      } else if (error.code === 'auth/network-request-failed') {
-        errorTitle = 'Network Error';
-        errorMessage = 'Network error. Please check your internet connection and try again.';
+      switch (error.code) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          errorTitle = 'Authentication Failed';
+          errorMessage = 'Invalid email or password.';
+          break;
+        case 'auth/email-already-in-use':
+          errorTitle = 'Email Already Registered';
+          errorMessage = 'This email is already in use.';
+          break;
+        case 'auth/weak-password':
+          errorTitle = 'Weak Password';
+          errorMessage = 'Password is too weak.';
+          break;
+        case 'auth/invalid-email':
+          errorTitle = 'Invalid Email';
+          errorMessage = 'Please enter a valid email address.';
+          break;
+        case 'auth/network-request-failed':
+          errorTitle = 'Network Error';
+          errorMessage = 'Please check your internet connection.';
+          break;
       }
 
-      // Show error message with SweetAlert2
       await Swal.fire({
         title: errorTitle,
         text: errorMessage,
         icon: 'error',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4f46e5',
-        showClass: {
-          popup: 'swal2-show'
-        },
-        hideClass: {
-          popup: 'swal2-hide'
-        }
       });
     } finally {
       setIsLoading(false);
@@ -187,7 +207,7 @@ const SignIn = () => {
 
       <div className="signin-container">
         <div className="signin-card">
-          <Link to="/" className="back-link" style={{ position: 'absolute', top: '20px', left: '20px', color: '#64748b', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <Link to="/" className="back-link">
             <FontAwesomeIcon icon={faArrowLeft} /> Back to Home
           </Link>
 
@@ -204,34 +224,55 @@ const SignIn = () => {
             <p>{isSignUp ? 'Join our community of learners today' : 'Sign in to continue your learning journey'}</p>
           </div>
 
-          <Form fluid formValue={formValue} onChange={value => setFormValue(value)}>
+          <Form
+            key={isSignUp ? 'signup' : 'signin'}
+            fluid
+            formValue={formValue}
+            onChange={(value) => setFormValue(value)}
+            autoComplete="new-password"
+          >
+            <input type="text" style={{ display: 'none' }} />
+            <input type="password" style={{ display: 'none' }} />
+
             <Form.Group>
               <Form.ControlLabel>Email</Form.ControlLabel>
-              <Form.Control
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                style={{ paddingLeft: '40px' }}
-              />
-              <FontAwesomeIcon
-                icon={faEnvelope}
-                style={{ position: 'absolute', left: '15px', top: '42px', color: '#64748b' }}
-              />
+              <div className="input-icon-wrapper">
+                <Form.Control
+                  name={`user_email_address_${randomId}`}
+                  type="email"
+                  placeholder="Enter your email"
+                  style={{ paddingLeft: '40px' }}
+                  autoComplete="new-password"
+                  value={formValue.email}
+                  onChange={(value) =>
+                    setFormValue((prev) => ({ ...prev, email: value }))
+                  }
+                />
+                <FontAwesomeIcon icon={faEnvelope} className="input-icon" />
+              </div>
             </Form.Group>
 
             <Form.Group>
               <Form.ControlLabel>Password</Form.ControlLabel>
-              <Form.Control
-                name="password"
-                type="password"
-                placeholder="Enter your password"
-                style={{ paddingLeft: '40px' }}
-              />
-              <FontAwesomeIcon
-                icon={faLock}
-                style={{ position: 'absolute', left: '15px', top: '42px', color: '#64748b' }}
-              />
-              {isSignUp && <Form.HelpText>Password must be at least 6 characters long</Form.HelpText>}
+              <div className="input-icon-wrapper">
+                <Form.Control
+                  name={`user_secret_password_${randomId}`}
+                  type="password"
+                  placeholder="Enter your password"
+                  style={{ paddingLeft: '40px' }}
+                  autoComplete="new-password"
+                  value={formValue.password}
+                  onChange={(value) =>
+                    setFormValue((prev) => ({ ...prev, password: value }))
+                  }
+                />
+                <FontAwesomeIcon icon={faLock} className="input-icon" />
+              </div>
+              {isSignUp && (
+                <Form.HelpText>
+                  Password must be at least 6 characters long
+                </Form.HelpText>
+              )}
             </Form.Group>
 
             <div className="toggle-container">
@@ -241,7 +282,9 @@ const SignIn = () => {
                 checkedChildren="Sign Up"
                 unCheckedChildren="Sign In"
               />
-              <span className="toggle-label">{isSignUp ? 'Creating new account' : 'Already have an account'}</span>
+              <span className="toggle-label">
+                {isSignUp ? 'Creating new account' : 'Already have an account'}
+              </span>
             </div>
 
             <Button
@@ -253,6 +296,21 @@ const SignIn = () => {
             >
               {isSignUp ? 'Create Account' : 'Sign In'}
             </Button>
+
+            <div className="guest-login-container">
+              <div className="guest-login-divider">OR</div>
+
+              <Button
+                block
+                appearance="ghost"
+                onClick={handleGuestLogin}
+                loading={isLoading}
+                className="guest-btn"
+              >
+                <FontAwesomeIcon icon={faUser} style={{ marginRight: '8px' }} />
+                Continue as Guest
+              </Button>
+            </div>
           </Form>
         </div>
       </div>
@@ -261,3 +319,4 @@ const SignIn = () => {
 };
 
 export default SignIn;
+

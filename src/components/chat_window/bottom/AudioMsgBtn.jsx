@@ -133,7 +133,7 @@ const AudioMsgBtn = ({ afterUpload }) => {
 
   return (
     <>
-      <div className="audio-recorder-wrapper">
+      <div className="audio-recorder-wrapper audio-btn">
         <AudioRecorder
           onRecordingComplete={addAudioElement}
           audioTrackConstraints={{
@@ -143,11 +143,14 @@ const AudioMsgBtn = ({ afterUpload }) => {
           downloadOnSavePress={false}
           downloadFileExtension="mp3"
           showVisualizer={true}
+          classes={{
+            AudioRecorderTimerClass: "hide-timer"
+          }}
         />
       </div>
 
       {/* Audio Preview Modal */}
-      <Modal open={showPreviewModal} onClose={handleCancel} size="xs">
+      <Modal open={showPreviewModal} onClose={handleCancel} size="xs" className="audio-preview-modal">
         <Modal.Header>
           <Modal.Title>
             <FontAwesomeIcon icon={faMicrophone} className="mr-2" style={{ color: '#7c3aed' }} />
@@ -168,7 +171,7 @@ const AudioMsgBtn = ({ afterUpload }) => {
               <Button
                 appearance="primary"
                 circle
-                size="lg"
+                size="md"
                 onClick={togglePlayPause}
                 className="mx-2"
                 style={{
@@ -186,8 +189,8 @@ const AudioMsgBtn = ({ afterUpload }) => {
 
             <div className="audio-waveform-placeholder"></div>
 
-            <p className="text-center text-muted" style={{ fontSize: '0.9rem', marginTop: '10px' }}>
-              {isPlaying ? 'Playing audio...' : 'Listen to your recording before sending'}
+            <p className="text-center text-muted" style={{ fontSize: '0.85rem', marginTop: '8px' }}>
+              {isPlaying ? 'Playing audio...' : 'Listen before sending'}
             </p>
           </div>
         </Modal.Body>
@@ -197,6 +200,7 @@ const AudioMsgBtn = ({ afterUpload }) => {
             onClick={handleCancel}
             className="mr-2"
             disabled={isUploading}
+            size="sm"
             style={{
               color: '#6b7280',
               fontWeight: '500'
@@ -209,12 +213,13 @@ const AudioMsgBtn = ({ afterUpload }) => {
             appearance="primary"
             onClick={handleSend}
             disabled={isUploading}
+            size="sm"
             style={{
               background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
               color: 'white',
               border: 'none',
-              borderRadius: '12px',
-              padding: '10px 15px',
+              borderRadius: '10px',
+              padding: '8px 12px',
               fontWeight: '600',
               boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
             }}

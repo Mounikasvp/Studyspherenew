@@ -55,7 +55,7 @@ const RoomInfoBtnModal = () => {
         Room information
       </Button>
 
-      <Modal open={isOpen} onClose={close}>
+      <Modal open={isOpen} onClose={close} className="room-info-modal">
         <Modal.Header>
           <Modal.Title>
             About {name}

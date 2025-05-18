@@ -160,8 +160,15 @@ const ChatBottom = () => {
   return (
     <div>
       <InputGroup className="input-group">
-        <AttchmentBtnModal afterUpload={afterUpload} />
-        <AudioMsgBtn afterUpload={afterUpload} />
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0
+        }}>
+          <AttchmentBtnModal afterUpload={afterUpload} />
+          <AudioMsgBtn afterUpload={afterUpload} />
+        </div>
         <Input
           placeholder="Type your message here..."
           value={input}

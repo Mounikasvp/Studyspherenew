@@ -32,6 +32,41 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <title>StudySphere</title>
+    <style>
+      /* PDF Modal Override Styles */
+      .file-preview-modal {
+        width: 95% !important;
+        height: 95vh !important;
+        margin: 2.5vh auto !important;
+        max-width: 1400px !important;
+        position: fixed !important;
+        top: 2.5% !important;
+        left: 2.5% !important;
+        right: 2.5% !important;
+        bottom: 2.5% !important;
+        z-index: 1050 !important;
+      }
+      .file-preview-modal .rs-modal-content {
+        height: 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .file-preview-modal .rs-modal-dialog {
+        height: 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .pdf-viewer {
+        transform: scale(1.0) !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+      .pdf-container {
+        width: 95% !important;
+        max-width: 1200px !important;
+        height: 600px !important;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

@@ -10,6 +10,7 @@ import { faComments } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   const isDesktop = useMediaQuery("(min-width: 992px)");
+  const isTablet = useMediaQuery("(max-width: 768px)");
   const { isExact } = useRouteMatch();
 
   const canRenderSidebar = isDesktop || isExact;
@@ -17,10 +18,10 @@ const Home = () => {
   return (
     <RoomsProvider>
       <div className="chat-page">
-        <Grid fluid className="h-100">
-          <Row className="h-100">
+        <Grid fluid className={`h-100 ${isTablet ? 'full-width-grid' : ''}`}>
+          <Row className={`h-100 ${isTablet ? 'full-width-row' : ''}`}>
             {canRenderSidebar && (
-              <Col xs={24} md={8} className="h-100">
+              <Col xs={24} md={isTablet ? 24 : 8} className={`h-100 ${isTablet ? 'full-width-col' : ''}`}>
                 <div className="sidebar">
                   <Sidebar />
                 </div>
@@ -29,7 +30,7 @@ const Home = () => {
 
             <Switch>
               <Route exact path="/chat/:chatId">
-                <Col xs={24} md={16} className="h-100">
+                <Col xs={24} md={isTablet ? 24 : 16} className={`h-100 ${isTablet ? 'full-width-col' : ''}`}>
                   <div className="chat-area">
                     <Chat />
                   </div>
@@ -37,7 +38,7 @@ const Home = () => {
               </Route>
               <Route>
                 {isDesktop && (
-                  <Col xs={24} md={16} className="h-100">
+                  <Col xs={24} md={isTablet ? 24 : 16} className={`h-100 ${isTablet ? 'full-width-col' : ''}`}>
                     <div className="empty-chat-placeholder">
                       <FontAwesomeIcon icon={faComments} className="placeholder-icon" />
                       <h3>Select a Chat Room</h3>

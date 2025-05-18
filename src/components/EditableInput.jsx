@@ -43,20 +43,21 @@ const EditableInput = ({
   return (
     <div className={wrapperClassName}>
       {label}
-      <InputGroup>
+      <InputGroup className="editable-input-group">
         <Input
           disabled={!isEditable}
           {...inputProps}
           value={input}
           placeholder={placeholder}
           onChange={onInputChange}
+          className="editable-input"
         />
 
-        <InputGroup.Button onClick={onEditClick}>
+        <InputGroup.Button onClick={onEditClick} className="edit-btn">
           {isEditable ? <CloseIcon /> : <EditIcon />}
         </InputGroup.Button>
         {isEditable && (
-          <InputGroup.Button onClick={onSaveClick}>
+          <InputGroup.Button onClick={onSaveClick} className="save-btn">
             <CheckIcon />
           </InputGroup.Button>
         )}

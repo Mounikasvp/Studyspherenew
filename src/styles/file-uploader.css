@@ -1,0 +1,54 @@
+/* Custom File Uploader Styles */
+.share-file-modal .rs-modal-dialog {
+  width: 90% !important;
+  max-width: 380px !important;
+  margin: 0 auto !important;
+}
+
+.share-file-modal .rs-modal-content {
+  width: 100% !important;
+}
+
+.share-file-modal .rs-modal-body {
+  padding: 10px !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  width: 100% !important;
+}
+
+/* File item styling */
+.rs-uploader-file-item {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.rs-uploader-file-item-info {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* File name truncation */
+.rs-uploader-file-item-name {
+  width: 100% !important;
+  max-width: 200px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  display: block !important;
+  font-size: 0.9rem !important;
+}
+
+/* File size styling */
+.rs-uploader-file-item-size {
+  width: 100% !important;
+}
+
+/* Uploader container */
+.rs-uploader {
+  width: 100% !important;
+}
+
+.rs-uploader-file-items {
+  width: 100% !important;
+}

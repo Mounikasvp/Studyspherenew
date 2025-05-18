@@ -50,16 +50,18 @@ export const ProfileProvider = ({ children }) => {
                 createdAt,
                 avatar,
                 uid: authObj.uid,
-                email: authObj.email,
+                email: authObj.email || null,
+                isGuest: userData.isGuest || false,
               };
 
               setProfile(data);
             } else {
               // If user data doesn't exist in the database yet, create a basic profile
               const newUserData = {
-                name: authObj.email.split('@')[0],
+                name: authObj.isAnonymous ? "Guest User" : (authObj.email ? authObj.email.split('@')[0] : "User"),
                 createdAt: serverTimestamp(),
-                avatar: null
+                avatar: null,
+                isGuest: authObj.isAnonymous
               };
 
               // Set the user data in the database
@@ -68,7 +70,8 @@ export const ProfileProvider = ({ children }) => {
                   const data = {
                     ...newUserData,
                     uid: authObj.uid,
-                    email: authObj.email,
+                    email: authObj.email || null,
+                    isGuest: authObj.isAnonymous || false,
                   };
                   setProfile(data);
                 })

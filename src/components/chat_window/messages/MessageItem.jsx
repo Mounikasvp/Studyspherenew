@@ -1,6 +1,5 @@
 import React, { memo } from "react";
 import { Button } from "rsuite";
-import TimeAgo from "timeago-react";
 import { useCurrentRoom } from "../../../context/current-room.context";
 import { useHover, useMediaQuery } from "../../../misc/custom-hooks";
 import { auth } from "../../../misc/firebase.config";
@@ -15,7 +14,14 @@ const renderFileMessage = (file) => {
   // Handle images (both base64 and regular)
   if (file.contentType.includes("image")) {
     return (
-      <div className="height-220">
+      <div style={{
+        maxHeight: '180px',
+        maxWidth: '250px',
+        background: 'transparent',
+        padding: '0',
+        overflow: 'hidden',
+        borderRadius: '12px'
+      }}>
         <ImgBtnModal src={file.url} fileName={file.name} />
       </div>
     );
@@ -37,7 +43,7 @@ const renderFileMessage = (file) => {
     );
   }
 
-  // For all other file types, use the FileAttachment component
+  // For all file types (including PDFs), use the FileAttachment component
   return <FileAttachment file={file} />;
 };
 
@@ -46,6 +52,7 @@ const MessageItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
 
   const [selfRef, isHovered] = useHover();
   const isMobile = useMediaQuery("(max-width: 992px)");
+  const isLaptop = useMediaQuery("(min-width: 993px)");
 
   const isAdmin = useCurrentRoom((v) => v.isAdmin);
   const admins = useCurrentRoom((v) => v.admins);
@@ -54,7 +61,8 @@ const MessageItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
   const isAuthor = auth.currentUser.uid === author.uid;
   const canGrantAdmin = isAdmin && !isAuthor;
 
-  const canShowIcons = isMobile || isHovered;
+  // Always show icons on laptop screens, show on hover or mobile otherwise
+  const canShowIcons = isLaptop || isMobile || isHovered;
   const isLiked = likes && Object.keys(likes).includes(auth.currentUser.uid);
 
   return (
@@ -90,10 +98,10 @@ const MessageItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
             </Button>
           )}
         </ProfileInfoBtnModal>
-        <TimeAgo
-          datetime={createdAt}
-          className="font-normal text-black-45 ml-2"
-        />
+
+        <span className="font-normal text-black-45 ml-2" style={{ fontSize: '0.8rem' }}>
+          {new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </span>
 
         <IconBtnControl
           {...(isLiked ? { color: "red" } : {})}

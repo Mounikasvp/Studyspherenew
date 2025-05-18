@@ -1,10 +1,30 @@
 import React, { useState } from "react";
-import TimeAgo from "timeago-react";
 import ProfileAvatar from "../ProfileAvatar";
 import { Button, Whisper, Tooltip, Badge } from "rsuite";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { auth } from "../../misc/firebase.config";
+
+// Helper function to format date
+const formatDate = (date) => {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  // Check if date is today
+  if (date >= today) {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // Check if date is yesterday
+  if (date >= yesterday && date < today) {
+    return 'Yesterday';
+  }
+
+  // For older dates, show the date
+  return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+};
 
 const RoomItem = ({ room }) => {
   const { createdAt, name, lastMessage, roomCode, isPrivate, admins } = room;
@@ -34,12 +54,9 @@ const RoomItem = ({ room }) => {
             <Badge content="Private" color="blue" style={{ marginLeft: '5px' }} />
           )}
         </div>
-        <TimeAgo
-          datetime={
-            lastMessage ? new Date(lastMessage.createdAt) : new Date(createdAt)
-          }
-          className="font-normal text-black-45"
-        />
+        <span className="font-normal text-black-45">
+          {formatDate(lastMessage ? new Date(lastMessage.createdAt) : new Date(createdAt))}
+        </span>
       </div>
 
       {/* Show room code for admins */}

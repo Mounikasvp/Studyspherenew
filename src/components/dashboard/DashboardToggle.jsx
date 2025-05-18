@@ -13,6 +13,7 @@ import { showToast, showErrorAlert } from "../../misc/sweet-alert";
 const DashboardToggle = () => {
   const { isOpen, close, open } = useModalState();
   const isMobile = useMediaQuery("(max-width: 992px)");
+  const is375Screen = useMediaQuery("(min-width: 375px) and (max-width: 767px)");
   const history = useHistory();
 
   const onSignOut = useCallback(() => {
@@ -37,10 +38,11 @@ const DashboardToggle = () => {
         <FontAwesomeIcon icon={faUser} /> Dashboard
       </Button>
       <Drawer
-        size={isMobile ? "full" : "sm"}
+        size={isMobile ? (is375Screen ? "xs" : "full") : "sm"}
         open={isOpen}
         onClose={close}
         placement="left"
+        className={`dashboard-drawer ${is375Screen ? 'dashboard-drawer-375' : ''}`}
       >
         <Dashboard onSignOut={onSignOut} />
       </Drawer>

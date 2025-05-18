@@ -338,24 +338,25 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
         align-items: center;
 
         .room-title {
-          font-size: 1.25rem;
-          font-weight: 700;
+          font-size: 0.9rem; /* Decreased to match Room information size */
+          font-weight: 600; /* Slightly reduced weight */
           color: $dark-color;
           margin: 0;
           display: flex;
           align-items: center;
 
           .back-link {
-            margin-right: 0.75rem;
+            margin-right: 0.5rem; /* Reduced margin */
             color: $primary-color;
             transition: all 0.3s ease;
-            width: 32px;
-            height: 32px;
+            width: 24px; /* Decreased size */
+            height: 24px; /* Decreased size */
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             background-color: rgba(79, 70, 229, 0.1);
+            font-size: 0.8rem; /* Smaller icon */
 
             &:hover {
               transform: translateX(-3px);
@@ -371,6 +372,13 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
           button {
             border-radius: 8px;
             transition: all 0.3s ease;
+            font-size: 0.8rem; /* Smaller text */
+            padding: 0.25rem 0.5rem; /* Smaller padding */
+            height: 24px; /* Match back button height */
+            width: 24px; /* Match back button width */
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             &:hover {
               background-color: rgba(79, 70, 229, 0.1);
@@ -496,9 +504,20 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
               padding: 0.25rem;
               overflow: hidden;
 
-              input[type="image"] {
-                border-radius: 16px;
-                max-height: 200px;
+              img {
+                border-radius: 12px;
+                max-height: 160px;
+                max-width: 250px;
+                object-fit: contain;
+              }
+
+              .download-link {
+                font-size: 0.75rem;
+                color: #4f46e5;
+                text-decoration: none;
+                display: block;
+                margin-top: 5px;
+                text-align: right;
               }
             }
           }
@@ -532,7 +551,9 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
 
               input[type="image"] {
                 border-radius: 16px;
-                max-height: 200px;
+                max-height: 160px;
+                max-width: 250px;
+                object-fit: contain;
               }
             }
           }
@@ -639,12 +660,15 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
         background-color: $light-color;
         border: 1px solid $border-color;
+        display: flex;
+        align-items: center;
 
         .rs-input {
           border: none;
           padding: 0.85rem 1rem;
           font-size: 0.95rem;
           background-color: transparent;
+          flex: 1;
 
           &:focus {
             box-shadow: none;
@@ -652,7 +676,7 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
           }
         }
 
-        .attachment-btn, .audio-btn {
+        .attachment-btn, .audio-btn, .audio-recorder-wrapper {
           background-color: transparent;
           color: #64748b;
           border: none;
@@ -662,6 +686,10 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
           display: flex;
           align-items: center;
           justify-content: center;
+          position: relative;
+          padding: 0;
+          margin: 0;
+          flex-shrink: 0;
 
           &:hover {
             color: $primary-color;
@@ -680,6 +708,13 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
           }
         }
 
+        /* Ensure audio recorder is properly aligned */
+        .audio-recorder-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
         .send-btn {
           background: $gradient-primary !important;
           color: white !important;
@@ -692,6 +727,7 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
           justify-content: center;
           margin-right: 4px;
           transition: all 0.3s ease !important;
+          flex-shrink: 0;
 
           &:hover {
             transform: scale(1.05);
@@ -786,6 +822,54 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
 }
 
 // Responsive Adjustments
+// Media query for 1140px screen size
+@media (max-width: 1140px) {
+  .chat-page {
+    .chat-area {
+      .chat-middle {
+        .msg-list {
+          .padded {
+            &.current-user, &:not(.current-user):not(.text-center) {
+              .height-220 {
+                max-width: 220px;
+
+                input[type="image"] {
+                  max-height: 150px;
+                  max-width: 220px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Media query for 1024px screen size
+@media (max-width: 1024px) {
+  .chat-page {
+    .chat-area {
+      .chat-middle {
+        .msg-list {
+          .padded {
+            &.current-user, &:not(.current-user):not(.text-center) {
+              .height-220 {
+                max-width: 200px;
+
+                input[type="image"] {
+                  max-height: 140px;
+                  max-width: 200px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 992px) {
   .chat-page {
     .chat-area {
@@ -797,6 +881,335 @@ $glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.15);
             }
           }
         }
+      }
+    }
+  }
+}
+
+// Media query for 768px screen size
+@media (max-width: 768px) {
+  .chat-page {
+    width: 100vw;
+    max-width: 100%;
+    padding: 0;
+    overflow-x: hidden;
+
+    .full-width-grid {
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 100vw !important;
+      max-width: 100vw !important;
+    }
+
+    .full-width-row {
+      margin: 0 !important;
+      width: 100vw !important;
+      max-width: 100vw !important;
+    }
+
+    .full-width-col {
+      padding: 0 !important;
+      width: 100vw !important;
+      max-width: 100vw !important;
+    }
+
+    .rs-grid-container {
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .rs-row {
+      margin: 0;
+      width: 100%;
+    }
+
+    .rs-col {
+      padding: 0;
+    }
+
+    .sidebar {
+      width: 100%;
+      padding: 1rem 0.75rem;
+      margin: 0;
+      border-right: none;
+    }
+
+    .chat-area {
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+
+      .chat-middle {
+        .msg-list {
+          .padded {
+            &.current-user, &:not(.current-user):not(.text-center) {
+              .height-220 {
+                max-width: 180px;
+
+                input[type="image"] {
+                  max-height: 130px;
+                  max-width: 180px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .chat-bottom {
+        .input-group {
+          display: flex;
+          align-items: center;
+
+          .rs-input {
+            flex: 1;
+          }
+
+          .attachment-btn, .audio-btn, .audio-recorder-wrapper {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .send-btn {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+    }
+
+    .empty-chat-placeholder {
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+}
+
+// Media query for 320px screen size
+@media (max-width: 320px) {
+  .chat-page {
+    // Sidebar adjustments
+    .sidebar {
+      padding: 1rem 0.5rem;
+
+      .sidebar-header {
+        margin-bottom: 1rem;
+
+        .dashboard-btn,
+        .create-room-btn,
+        .join-room-btn {
+          padding: 0.5rem 0.75rem !important;
+          font-size: 0.85rem !important;
+          width: 100%;
+          text-align: center;
+        }
+
+        .view-toggle {
+          small {
+            font-size: 0.7rem;
+          }
+        }
+
+        .search-container {
+          margin: 0.75rem 0;
+
+          .search-input {
+            .rs-input {
+              padding: 0.5rem 0.5rem 0.5rem 2rem;
+              font-size: 0.85rem;
+            }
+
+            .rs-input-group-addon {
+              padding-left: 0.75rem;
+            }
+          }
+        }
+      }
+
+      .divider {
+        font-size: 0.8rem;
+        margin: 0.75rem 0;
+        text-align: center;
+      }
+
+      .room-list-container {
+        .room-item-container {
+          padding: 0.35rem;
+
+          h3 {
+            font-size: 0.9rem;
+          }
+
+          .text-black-70 {
+            font-size: 0.75rem;
+          }
+
+          .text-black-45 {
+            font-size: 0.7rem;
+          }
+
+          .room-code-container {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.35rem;
+          }
+        }
+      }
+    }
+
+    // Chat area adjustments
+    .chat-area {
+      margin: 0.25rem;
+
+      .chat-top {
+        padding: 0.75rem 1rem;
+
+        .room-header {
+          .room-title {
+            font-size: 0.8rem; /* Even smaller on mobile */
+
+            .back-link {
+              width: 20px; /* Smaller on mobile */
+              height: 20px; /* Smaller on mobile */
+              margin-right: 0.4rem;
+              font-size: 0.7rem; /* Smaller icon */
+            }
+          }
+
+          .room-actions {
+            gap: 0.25rem;
+
+            button {
+              padding: 0 !important;
+              width: 20px !important; /* Smaller on mobile */
+              height: 20px !important; /* Smaller on mobile */
+              font-size: 0.7rem !important; /* Smaller text */
+            }
+          }
+        }
+
+        .room-info {
+          .room-description {
+            font-size: 0.75rem; /* Even smaller on mobile */
+
+            button {
+              font-size: 0.75rem !important; /* Match room title size */
+            }
+          }
+        }
+      }
+
+      .chat-middle {
+        padding: 0.75rem;
+
+        .msg-list {
+          li.text-center {
+            font-size: 0.75rem;
+            margin: 0.75rem 0;
+          }
+
+          .padded {
+            max-width: 90%;
+
+            &.current-user, &:not(.current-user):not(.text-center) {
+              .word-break-all, audio, .height-220 {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.85rem;
+              }
+
+              audio, .audio-message {
+                width: 100%;
+                max-width: 100%;
+              }
+
+              .height-220 {
+                max-width: 150px;
+
+                input[type="image"] {
+                  max-height: 120px;
+                  max-width: 150px;
+                }
+              }
+            }
+
+            .d-flex.align-items-center {
+              button.p-0 {
+                font-size: 0.85rem;
+              }
+
+              time {
+                font-size: 0.7rem;
+              }
+            }
+          }
+        }
+      }
+
+      .chat-bottom {
+        padding: 0.75rem 1rem;
+
+        .input-group {
+          display: flex;
+          align-items: center;
+
+          .rs-input {
+            padding: 0.65rem 0.75rem;
+            font-size: 0.85rem;
+            flex: 1;
+          }
+
+          .attachment-btn, .audio-btn, .audio-recorder-wrapper {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            svg {
+              font-size: 0.9rem;
+            }
+          }
+
+          .send-btn {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            svg {
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+
+    // Empty chat placeholder
+    .empty-chat-placeholder {
+      padding: 1.5rem 1rem;
+
+      .placeholder-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      h3 {
+        font-size: 1.25rem;
+        text-align: center;
+      }
+
+      p {
+        font-size: 0.9rem;
+        text-align: center;
       }
     }
   }

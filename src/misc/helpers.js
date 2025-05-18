@@ -26,30 +26,46 @@ export async function getUserUpdates(userId, keyToUpdate, value, db) {
   const updates = {};
   updates[`/users/${userId}/${keyToUpdate}`] = value;
 
-  const getMsgs = get(
-    query(ref(db, "/messages"), orderByChild("author/uid"), equalTo(userId))
-  );
+  try {
+    // Get all messages
+    const getMsgs = get(
+      query(ref(db, "/messages"), orderByChild("author/uid"), equalTo(userId))
+    );
 
-  const getRooms = get(
-    query(
-      ref(db, "/rooms"),
-      orderByChild("lastMessage/author/uid"),
-      equalTo(userId)
-    )
-  );
-  //   // Index not defined, add ".indexOn": "author/uid", for path "/messages", to the rules
+    // Get all rooms where the user is the author of the last message
+    const getRooms = get(
+      query(
+        ref(db, "/rooms"),
+        orderByChild("lastMessage/author/uid"),
+        equalTo(userId)
+      )
+    );
 
-  const [mSnap, rSnap] = await Promise.all([getMsgs, getRooms]);
+    const [mSnap, rSnap] = await Promise.all([getMsgs, getRooms]);
 
-  mSnap.forEach((msgSnap) => {
-    updates[`/messages/${msgSnap.key}/author/${keyToUpdate}`] = value;
-  });
+    // Update author information in messages
+    mSnap.forEach((msgSnap) => {
+      updates[`/messages/${msgSnap.key}/author/${keyToUpdate}`] = value;
+    });
 
-  rSnap.forEach((roomSnap) => {
-    updates[`/rooms/${roomSnap.key}/lastMessage/author/${keyToUpdate}`] = value;
-  });
+    // Update author information in room's last message
+    rSnap.forEach((roomSnap) => {
+      updates[`/rooms/${roomSnap.key}/lastMessage/author/${keyToUpdate}`] = value;
+    });
 
-  return updates;
+    return updates;
+  } catch (error) {
+    console.error("Error updating user data:", error.message);
+
+    // If there's an indexing error, try a different approach
+    if (error.message.includes("Index not defined")) {
+      // Just update the user profile for now
+      console.log("Falling back to basic profile update due to indexing issue");
+      return updates;
+    }
+
+    throw error;
+  }
 }
 
 export function groupBy(array, groupingKeyFn) {

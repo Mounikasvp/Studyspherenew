@@ -227,6 +227,33 @@ const Messages = () => {
     [chatId, messages]
   );
 
+  // Helper function to format date headers
+  const formatDateHeader = (dateStr) => {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    // Check if date is today
+    if (date.toDateString() === today.toDateString()) {
+      return 'Today';
+    }
+
+    // Check if date is yesterday
+    if (date.toDateString() === yesterday.toDateString()) {
+      return 'Yesterday';
+    }
+
+    // For older dates, show a more friendly format
+    return date.toLocaleDateString([], {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    });
+  };
+
   const renderMessages = () => {
     const groups = groupBy(messages, (item) =>
       new Date(item.createdAt).toDateString()
@@ -235,9 +262,23 @@ const Messages = () => {
     const items = [];
 
     Object.keys(groups).forEach((date) => {
+      const formattedDate = formatDateHeader(date);
       items.push(
-        <li key={date} className="text-center mb-1 padded" data-content={date}>
-          {date}
+        <li
+          key={date}
+          className="text-center mb-2 mt-2"
+          style={{
+            padding: '5px 10px',
+            backgroundColor: 'rgba(0, 0, 0, 0.03)',
+            borderRadius: '15px',
+            display: 'inline-block',
+            margin: '0 auto',
+            fontSize: '0.9rem',
+            fontWeight: '500',
+            color: '#555'
+          }}
+        >
+          {formattedDate}
         </li>
       );
 
