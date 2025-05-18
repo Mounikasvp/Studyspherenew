@@ -506,37 +506,19 @@
   background-color: white;
 }
 
-/* Override react-file-viewer styles */
-.pg-viewer-wrapper {
-  overflow: hidden !important;
-}
-
-.pg-viewer {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.photo-viewer-container {
-  height: 100% !important;
-  width: 100% !important;
-}
-
-.document-container {
-  height: 100% !important;
-  width: 100% !important;
-  overflow: auto !important;
-}
-
-.react-file-viewer {
+/* File viewer styles */
+.file-viewer-container {
   width: 100% !important;
   height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.react-file-viewer iframe,
-.react-file-viewer embed,
-.react-file-viewer object {
+.file-viewer-container iframe,
+.file-viewer-container embed,
+.file-viewer-container object {
   width: 100% !important;
   height: 100% !important;
   min-height: 500px !important;

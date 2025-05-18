@@ -3,7 +3,7 @@ import { Button, Modal, Loader } from 'rsuite';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilePdf, faDownload, faExpand } from '@fortawesome/free-solid-svg-icons';
 import { useModalState } from '../../../misc/custom-hooks';
-import PdfJsViewer from './PdfJsViewer';
+import SimplePdfJsViewer from './SimplePdfJsViewer';
 
 const DirectPdfViewer = ({ url, fileName }) => {
   const { isOpen, open, close } = useModalState();
@@ -84,7 +84,7 @@ const DirectPdfViewer = ({ url, fileName }) => {
         </Modal.Header>
         <Modal.Body>
           <div className="pdf-viewer-container">
-            <PdfJsViewer url={url} fileName={fileName} />
+            <SimplePdfJsViewer url={url} fileName={fileName} />
           </div>
         </Modal.Body>
         <Modal.Footer>

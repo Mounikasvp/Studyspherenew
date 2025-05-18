@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import FileViewer from 'react-file-viewer';
 import { Button, Loader } from 'rsuite';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faFilePdf, 
-  faFileWord, 
-  faFileExcel, 
-  faFilePowerpoint, 
-  faFileImage, 
-  faFileVideo, 
-  faFileAudio, 
-  faFileArchive, 
-  faFileCode, 
-  faFileAlt, 
+import {
+  faFilePdf,
+  faFileWord,
+  faFileExcel,
+  faFilePowerpoint,
+  faFileImage,
+  faFileVideo,
+  faFileAudio,
+  faFileArchive,
+  faFileCode,
+  faFileAlt,
   faFile,
-  faDownload 
+  faDownload,
+  faExternalLinkAlt
 } from '@fortawesome/free-solid-svg-icons';
+import '../../../styles/file-viewer.css';
 
 // Helper function to get appropriate icon based on file type
 const getFileIcon = (fileType) => {
@@ -122,26 +123,19 @@ const AdvancedFileViewer = ({ url, fileName }) => {
     // Extract file extension from fileName
     const extension = fileName.split('.').pop().toLowerCase();
     setFileType(extension);
-    
+
     // Set a timeout to hide the loader after a reasonable time
     // even if the onLoad event doesn't fire
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 3000);
-    
+
     return () => clearTimeout(timer);
   }, [fileName]);
 
-  // Function to handle file loading
-  const handleLoad = () => {
-    setIsLoading(false);
-  };
-
-  // Function to handle errors
-  const handleError = (error) => {
-    console.error('Error in file viewer:', error);
-    setIsLoading(false);
-    setHasError(true);
+  // Function to open in new tab
+  const openInNewTab = () => {
+    window.open(url, '_blank');
   };
 
   // Function to download the file
@@ -171,43 +165,31 @@ const AdvancedFileViewer = ({ url, fileName }) => {
         </div>
       )}
 
-      {hasError ? (
-        <div className="file-error">
+      <div className="file-preview-container">
+        <div className="file-icon-container">
           <FontAwesomeIcon icon={icon} style={{ fontSize: '48px', color: color, marginBottom: '15px' }} />
-          <p>Could not load file preview</p>
-          <Button 
-            appearance="primary" 
+          <p>{fileName}</p>
+        </div>
+
+        <div className="file-actions">
+          <Button
+            appearance="primary"
+            onClick={openInNewTab}
+            style={{ marginRight: '10px' }}
+          >
+            <FontAwesomeIcon icon={faExternalLinkAlt} style={{ marginRight: '8px' }} />
+            Open in Browser
+          </Button>
+
+          <Button
+            appearance="primary"
             onClick={handleDownload}
-            style={{ marginTop: '15px' }}
           >
             <FontAwesomeIcon icon={faDownload} style={{ marginRight: '8px' }} />
             Download File
           </Button>
         </div>
-      ) : (
-        <div className="file-viewer-wrapper">
-          <FileViewer
-            fileType={fileType}
-            filePath={url}
-            onError={handleError}
-            onLoad={handleLoad}
-            errorComponent={() => (
-              <div className="file-error">
-                <FontAwesomeIcon icon={icon} style={{ fontSize: '48px', color: color, marginBottom: '15px' }} />
-                <p>Could not load file preview</p>
-                <Button 
-                  appearance="primary" 
-                  onClick={handleDownload}
-                  style={{ marginTop: '15px' }}
-                >
-                  <FontAwesomeIcon icon={faDownload} style={{ marginRight: '8px' }} />
-                  Download File
-                </Button>
-              </div>
-            )}
-          />
-        </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Loader } from 'rsuite';
-import * as pdfjsLib from 'pdfjs-dist';
-import 'pdfjs-dist/web/pdf_viewer.css';
+import React, { useState } from 'react';
+import { Loader, Button } from 'rsuite';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilePdf, faDownload, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 // Set the worker source
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
@@ -20,11 +20,11 @@ const PdfJsViewer = ({ url, fileName }) => {
     const loadPdf = async () => {
       try {
         setIsLoading(true);
-        
+
         // Load the PDF document
         const loadingTask = pdfjsLib.getDocument(url);
         const pdf = await loadingTask.promise;
-        
+
         setPdfDoc(pdf);
         setNumPages(pdf.numPages);
         setIsLoading(false);
@@ -46,22 +46,22 @@ const PdfJsViewer = ({ url, fileName }) => {
       try {
         // Get the page
         const page = await pdfDoc.getPage(currentPage);
-        
+
         // Set the scale
         const viewport = page.getViewport({ scale });
-        
+
         // Prepare canvas
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         canvas.height = viewport.height;
         canvas.width = viewport.width;
-        
+
         // Render the PDF page
         const renderContext = {
           canvasContext: context,
           viewport: viewport
         };
-        
+
         await page.render(renderContext).promise;
       } catch (err) {
         console.error('Error rendering page:', err);
@@ -109,8 +109,8 @@ const PdfJsViewer = ({ url, fileName }) => {
         <>
           <div className="pdf-controls">
             <div className="pdf-navigation">
-              <button 
-                onClick={goToPreviousPage} 
+              <button
+                onClick={goToPreviousPage}
                 disabled={currentPage <= 1}
                 className="pdf-nav-btn"
               >
@@ -119,8 +119,8 @@ const PdfJsViewer = ({ url, fileName }) => {
               <span className="pdf-page-info">
                 Page {currentPage} of {numPages}
               </span>
-              <button 
-                onClick={goToNextPage} 
+              <button
+                onClick={goToNextPage}
                 disabled={currentPage >= numPages}
                 className="pdf-nav-btn"
               >

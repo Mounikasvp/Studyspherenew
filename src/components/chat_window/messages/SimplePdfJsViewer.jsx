@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Loader } from 'rsuite';
+import { Loader, Button } from 'rsuite';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilePdf, faDownload, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import '../../../styles/file-viewer.css';
 
-const ReactPdfViewer = ({ url, fileName }) => {
+const SimplePdfJsViewer = ({ url, fileName }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
 
   // Function to open in new tab
   const openInNewTab = () => {
@@ -37,18 +36,11 @@ const ReactPdfViewer = ({ url, fileName }) => {
     }
   };
 
-  // Extract file extension from fileName
-  const getFileExtension = (name) => {
-    return name.split('.').pop().toLowerCase();
-  };
-
-  const fileExtension = getFileExtension(fileName);
-
   return (
-    <div className="react-pdf-container">
+    <div className="pdf-js-viewer">
       {isLoading && (
         <div className="pdf-loading">
-          <Loader size="md" content="Loading file..." vertical />
+          <Loader size="md" content="Loading PDF..." vertical />
         </div>
       )}
 
@@ -81,4 +73,4 @@ const ReactPdfViewer = ({ url, fileName }) => {
   );
 };
 
-export default ReactPdfViewer;
+export default SimplePdfJsViewer;
