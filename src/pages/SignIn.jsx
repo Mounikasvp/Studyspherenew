@@ -184,6 +184,10 @@ const SignIn = () => {
           errorTitle = 'Network Error';
           errorMessage = 'Please check your internet connection.';
           break;
+        default:
+          errorTitle = 'Authentication Error';
+          errorMessage = error.message;
+          break;
       }
 
       await Swal.fire({
