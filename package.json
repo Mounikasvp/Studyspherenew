@@ -3,25 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-regular-svg-icons": "^6.2.0",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-regular-svg-icons": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@rsuite/icons": "^1.0.2",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.5.0",
     "aos": "^2.3.4",
     "firebase": "^9.14.0",
-    "react": "^18.3.1",
+    "react": "^17.0.2",
     "react-audio-voice-recorder": "^2.2.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "^17.0.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.1",
     "rsuite": "^5.22.1",
     "sass": "^1.56.1",
-    "sweetalert2": "^11.21.0",
+    "sweetalert2": "^11.7.32",
     "timeago-react": "^3.0.5",
     "use-context-selector": "^1.4.1",
     "web-vitals": "^2.1.4"
@@ -29,7 +29,7 @@
   "scripts": {
     "start": "cross-env NODE_OPTIONS=--max-old-space-size=4096 react-scripts start",
     "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 react-scripts build",
-    "vercel-build": "npm install --force && npm run build",
+    "vercel-build": "npm install && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -52,9 +52,9 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
+    "autoprefixer": "^10.4.14",
     "cross-env": "^7.0.3",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.4"
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2"
   }
 }
